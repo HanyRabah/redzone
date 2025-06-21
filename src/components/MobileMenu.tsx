@@ -1,0 +1,74 @@
+'use client';
+
+import { useState } from 'react';
+
+export default function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="md:hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="text-gray-500 hover:text-red-600 focus:outline-none"
+      >
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          {isOpen ? (
+            <path d="M6 18L18 6M6 6l12 12" />
+          ) : (
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          )}
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-white shadow-lg p-4 animate-slideIn">
+          <nav className="space-y-4">
+            <a
+              href="/about"
+              className="block text-gray-800 hover:text-red-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              About
+            </a>
+            <a
+              href="/services"
+              className="block text-gray-800 hover:text-red-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Services
+            </a>
+            <a
+              href="/portfolio"
+              className="block text-gray-800 hover:text-red-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Portfolio
+            </a>
+            <a
+              href="/blog"
+              className="block text-gray-800 hover:text-red-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Blog
+            </a>
+            <a
+              href="/contact"
+              className="block text-gray-800 hover:text-red-600 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact
+            </a>
+          </nav>
+        </div>
+      )}
+    </div>
+  );
+}
