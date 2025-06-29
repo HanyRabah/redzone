@@ -29,10 +29,10 @@ const ScrollTop = () => {
   return (
     <motion.button
       onClick={scrollToTop}
-      className="fixed bottom-12 right-12 w-12 h-12  flex items-center justify-center z-50 backdrop-blur-sm bg-black p-5"
+      className="fixed bottom-12 right-12 w-12 h-12  flex items-center justify-center z-50 backdrop-blur-sm bg-black p-5 border border-red-500/20"
       initial={{ scale: 0, opacity: 0, rotate: 180 }}
       animate={isVisible ? { scale: 1, opacity: 1, rotate: 0 } : { scale: 0, opacity: 0, rotate: 180 }}
-      transition={{ delay: 0.5, duration: 0.8, ease: "backOut" }}
+      transition={{ delay: 0.5, duration: 0.8, ease: "backOut",type: "spring", stiffness: 100 }}
       whileHover={{
         scale: 1.1,
         boxShadow: "0 0 20px rgba(239, 68, 68, 0.5)",

@@ -4,13 +4,8 @@ import { Box, Typography, Container } from "@mui/material";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Client {
-  id: string;
-  name: string;
-  logo: string;
-  logoHover: string;
-}
+import { Client } from "@prisma/client";
+import useBreakpoint from "@/hooks/useBreakpoint";
 
 interface ClientsProps {
   clients: Client[];
@@ -19,6 +14,7 @@ interface ClientsProps {
 const Clients: React.FC<ClientsProps> = ({ clients }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const breakpoint = useBreakpoint();
 
   const titleVariants = {
     hidden: { width: "0%" },
@@ -120,44 +116,26 @@ const Clients: React.FC<ClientsProps> = ({ clients }) => {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-20"
-            style={{ gridTemplateColumns: `repeat(${4}, 1fr)` }}
+            className="grid grid-cols-2 lg:grid-cols-4 mb-20"
           >
             {clients.map((client, index) => (
               <motion.div
                 key={`method2-${client.id}`}
                 variants={clientVariants}
                 custom={index}
-                className={`group relative h-48  p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(
+                className={`group relative h-48 p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(
                   index,
                   clients.length,
-                  4
-                )}`}
+                  breakpoint === "desktop" ? 4 : 2
+                )}`} 
               >
-                <Link href={client.id} className="relative w-full h-full link">
-                  {client.logoHover ? (
-                    <>
-                      <Image
-                        src={client.logo}
-                        alt={client.name}
-                        fill
-                        className="absolute inset-0  w-full h-full object-contain group-hover:opacity-0 transition-opacity duration-300"
-                      />
-                      <Image
-                        src={client.logoHover}
-                        alt={client.name}
-                        fill
-                        className="absolute inset-0 w-full h-full object-contain opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </>
-                  ) : (
+                <Link href={client.website || "#"} target={client.website ? "_blank" : "_self"} className="relative w-full h-full link">
                     <Image
                       src={client.logo}
                       alt={client.name}
                       fill
-                      className="w-full h-full object-contain group-hover:opacity-100 transition-opacity duration-300"
+                      className="w-full h-full object-contain group-hover:opacity-100 transition-all duration-100 group-hover:[filter:invert(14%)_sepia(100%)_saturate(7463%)_hue-rotate(1deg)_brightness(103%)_contrast(103%)]"
                     />
-                  )}
                 </Link>
               </motion.div>
             ))}

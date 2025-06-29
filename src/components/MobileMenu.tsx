@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,41 +32,41 @@ export default function MobileMenu() {
       {isOpen && (
         <div className="absolute top-16 left-0 right-0 bg-white shadow-lg p-4 animate-slideIn">
           <nav className="space-y-4">
-            <a
+            <Link
               href="/about"
               className="block text-gray-800 hover:text-red-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               About
-            </a>
-            <a
+            </Link>
+            <Link
               href="/services"
               className="block text-gray-800 hover:text-red-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Services
-            </a>
-            <a
+            </Link>
+            <Link
               href="/portfolio"
               className="block text-gray-800 hover:text-red-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Portfolio
-            </a>
-            <a
+            </Link>
+            <Link
               href="/blog"
               className="block text-gray-800 hover:text-red-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Blog
-            </a>
-            <a
+            </Link>
+            <Link
               href="/contact"
               className="block text-gray-800 hover:text-red-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Contact
-            </a>
+            </Link>
           </nav>
         </div>
       )}

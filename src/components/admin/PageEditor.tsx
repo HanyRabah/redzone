@@ -61,12 +61,12 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h6" gutterBottom>
             {isNew ? 'Create New Page' : 'Edit Page'}
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}> 
           <TextField
             required
             fullWidth
@@ -75,7 +75,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
             fullWidth
@@ -84,7 +84,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             required
             fullWidth
@@ -95,7 +95,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Meta Title"
@@ -103,7 +103,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Meta Description"
@@ -111,7 +111,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             onChange={(e) => setFormData({ ...formData, metaDesc: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Box display="flex" alignItems="center">
             <Switch
               checked={formData.published}
@@ -120,7 +120,7 @@ export default function PageEditor({ initialData, isNew = false }: PageEditorPro
             <Typography>Published</Typography>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Button type="submit" variant="contained" color="primary">
             {isNew ? 'Create Page' : 'Save Changes'}
           </Button>

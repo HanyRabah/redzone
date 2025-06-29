@@ -1,49 +1,26 @@
-'use client';
+// app/admin/layout.tsx
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Providers from "./providers";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth-options";
 
-import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import AdminSidebar from '@/components/admin/Sidebar';
-import AdminHeader from '@/components/admin/Header';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { redirect } from 'next/navigation';
+const inter = Inter({ subsets: ["latin"] });
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#ff0000', // Red Zone theme color
-    },
-  },
-});
-
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const session = await getServerSession(authOptions);
-
-  // if (!session) {
-  //   redirect('/admin/login');
-  // }
+  const session = await getServerSession(authOptions);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AdminHeader />
-        <AdminSidebar />
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            mt: 8,
-          }}
-        >
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers session={session}>
           {children}
-        </Box>
-      </Box>
-    </ThemeProvider>
+        </Providers>
+      </body>
+    </html>
   );
 }

@@ -1,48 +1,281 @@
-// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String    @unique
-  password      String
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  email         String       @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String       @default("admin")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  bio           String?
+  social        UserSocial[]
+  blogPosts     BlogPost[]   @relation("BlogPostAuthor")
 }
 
-model Page {
-  id            String    @id @default(cuid())
-  title         String
-  slug          String    @unique
-  content       String
-  metaTitle     String?
-  metaDesc      String?
-  published     Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model UserSocial {
+  id       String @id @default(cuid())
+  platform String
+  url      String
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Blog {
-  id            String    @id @default(cuid())
-  title         String
-  slug          String    @unique
-  content       String
-  excerpt       String?
-  featuredImage String?
-  published     Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
-enum Role {
-  USER
-  ADMIN
+model HeroSection {
+  id               String   @id @default(cuid())
+  page             String   @unique
+  backgroundImage  String?
+  theme            String   @default("dark")
+  welcomeText      String?
+  titleLines       String[]
+  descriptionLines String[]
+  buttonText       String?
+  buttonLink       String?
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model HeroSlider {
+  id            String      @id @default(cuid())
+  page          String      @unique
+  autoplay      Boolean     @default(true)
+  autoplaySpeed Int         @default(5)
+  showDots      Boolean     @default(true)
+  showArrows    Boolean     @default(true)
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  slides        HeroSlide[]
+}
+
+model HeroSlide {
+  id              String     @id @default(cuid())
+  heroSliderId    String
+  backgroundImage String?
+  welcomeText     String?
+  titleLines      String[]
+  description     String
+  buttonText      String?
+  buttonLink      String?
+  buttonType      String     @default("internal")
+  isActive        Boolean    @default(true)
+  sortOrder       Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  heroSlider      HeroSlider @relation(fields: [heroSliderId], references: [id], onDelete: Cascade)
+
+  @@index([heroSliderId, sortOrder])
+}
+
+model AboutUsSection {
+  id           String   @id @default(cuid())
+  titleLines   String[]
+  contentLines String[]
+  closeLine    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  category    String
+  title       String
+  description String
+  image       String
+  link        String?
+  slug        String   @unique
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String
+  website   String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id      String  @id @default(cuid())
+  title   String
+  slug    String  @unique
+  excerpt String
+  content String
+  image   String?
+
+  authorId String?
+  author   User?   @relation("BlogPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  categoryId     String         @default("")
+  publishedAt    DateTime?
+  categories     BlogCategory[] @relation("categories")
+  tags           BlogTag[]      @relation("tags")
+  isPublished    Boolean        @default(false)
+  isFeatured     Boolean        @default(false)
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model BlogCategory {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  postCount Int        @default(0)
+  posts     BlogPost[] @relation("categories")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model BlogTag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  postCount Int        @default(0)
+  posts     BlogPost[] @relation("tags")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  role       String
+  content    String
+  avatar     String?
+  rating     Int?     @default(5)
+  isActive   Boolean  @default(true)
+  isFeatured Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model WhoWeAreSection {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  extras      Json[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  image       String?
+  bio         String?
+  socialLinks Json?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TeamSection {
+  id         String   @id @default(cuid())
+  smallTitle String?
+  titleLines String[]
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model WeAreCreativeSection {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  images      String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactDetails {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  contacts    Json[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  message   String
+  isRead    Boolean  @default(false)
+  isReplied Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  type      String   @default("text")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

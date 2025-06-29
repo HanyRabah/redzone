@@ -1,3 +1,4 @@
+"use client"
 import { createTheme } from "@mui/material";
 import { Oswald, Open_Sans } from "next/font/google";
 

@@ -1,155 +1,46 @@
-// components/Layout/LoadingScreen.tsx
-import React from 'react';
-import { Box } from '@mui/material';
-import { motion } from 'framer-motion';
+"use client"
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-const LoadingScreen: React.FC = () => {
-  const overlayVariants = {
-    initial: { 
-      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
-    },
-    animate: {
-      clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
-      transition: {
-        duration: 1,
-        ease: [0.858, 0.01, 0.068, 0.99],
-        delay: 1.5
-      }
-    }
-  };
+export default function LoadingScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-  const overlayVariants2 = {
-    initial: { 
-      clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-    },
-    animate: {
-      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-      transition: {
-        duration: 1,
-        ease: [0.858, 0.01, 0.068, 0.99],
-        delay: 2
-      }
-    }
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsAnimatingOut(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 800);
+    }, 1000);
 
-  const logoVariants = {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.76, 0.06, 0.85, 0.07],
-        delay: 0.5
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.5,
-        ease: [0.76, 0.06, 0.85, 0.07]
-      }
-    }
-  };
+    return () => clearTimeout(timer);
+  }, []);
 
-  const spinnerVariants = {
-    animate: {
-      rotate: 360,
-      transition: {
-        duration: 1.2,
-        ease: "linear",
-        repeat: Infinity
-      }
-    }
-  };
+  if (!isLoading) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ 
-        opacity: 0,
-        transition: { duration: 0.5, ease: [0.76, 0.06, 0.85, 0.07] }
-      }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black"
-    >
-      {/* First Overlay */}
-      <motion.div
-        variants={overlayVariants}
-        initial="initial"
-        animate="animate"
-        className="absolute inset-0 w-full h-full bg-black z-[99]"
-      />
-
-      {/* Second Overlay */}
-      <motion.div
-        variants={overlayVariants2}
-        initial="initial"
-        animate="animate"
-        className="absolute inset-0 w-full h-full bg-black z-[98]"
-      />
-
-      {/* Loading Content */}
-      <Box className="relative z-[101] flex flex-col items-center justify-center">
-        {/* Logo */}
-        <motion.div
-          variants={logoVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="mb-8"
-        >
-          <Image
-            src="/logo-loader.png"
-            alt="Red Zone"
-            width={200}
-            height={80}
-            className="w-48 h-auto"
-          />
-        </motion.div>
-
-        {/* Spinner */}
-        <motion.div
-          variants={spinnerVariants}
-          animate="animate"
-          className="w-24 h-24 relative"
-        >
-          <div 
-            className="w-full h-full border-2 border-transparent border-l-white rounded-full"
-            style={{
-              borderLeftColor: 'white',
-              borderTopColor: 'transparent',
-              borderRightColor: 'transparent',
-              borderBottomColor: 'transparent'
-            }}
-          />
-          
-          {/* Inner logo positioned absolutely */}
+    <div className="fixed inset-0 z-50">
+      <div 
+        className={`
+          absolute inset-0 bg-black transition-transform duration-1200 cubic-bezier(.858, .01, .068, .99)
+          ${isAnimatingOut ? 'transform translate-x-full' : ''}
+        `}/>
+      <div 
+        className={`
+          absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+          transition-all duration-700 ease-out 
+          ${isAnimatingOut ? 'opacity-0' : ''}
+        `}>
+        <div className="relative w-24 h-24">
+          <div className="absolute inset-0 border-2 border-gray-700 border-l-white rounded-full animate-spin" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Image
-              src="/logo-loader.png"
-              alt="Red Zone"
-              width={40}
-              height={16}
-              className="w-10 h-auto opacity-80"
-            />
+            <div className="w-24 h-24 rounded-full flex items-center justify-center">
+              <Image src="/assets/images/logo/logo-loader.png" alt="logo" width={100} height={100} />
+            </div>
           </div>
-        </motion.div>
-      </Box>
-
-      <style jsx>{`
-        @keyframes loading-anim {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default LoadingScreen;
+}

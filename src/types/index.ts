@@ -39,10 +39,16 @@ export interface NavItem {
   }
   
   export interface SlideData {
-    title: string[];
-    subtitle?: string;
-    description?: string[];
-    bgImage: string;
+    id: number | string;
+    content: {
+      title: string[];
+      subtitle?: string;
+      description?: string[];
+      buttonText: string;
+      buttonLink: string;
+      welcomeText?: string;
+    };
+    backgroundImage: string;
     theme?: 'dark' | 'light';
   }
   

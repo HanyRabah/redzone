@@ -1,10 +1,10 @@
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 const useUser = () => {
-    const [users, setUsers] = useState<User[] | null>(null);
+    const [users, setUsers] = useState<User[] | undefined>(undefined);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | undefined>(undefined);
     
     const fetchUser = async () => {
         try {
@@ -13,7 +13,8 @@ const useUser = () => {
             setUsers(data);
             setLoading(false);
         } catch (error) {
-            setError('Failed to fetch user');
+            console.error('Error fetching users:', error);
+            setError('Failed to fetch user');       
             setLoading(false);
         }
     };
@@ -26,11 +27,12 @@ const useUser = () => {
                 setUsers((prevUsers) => prevUsers?.filter((user) => user.id !== userId));  
             }
         } catch (error) {
+            console.error('Error deleting user:', error);
             setError('Failed to delete user');
         }
     };
 
-    const addUser = async (userData: any) => {
+    const addUser = async (userData: User) => {
         try {
             const response = await fetch('/api/user', {
                 method: 'POST',
@@ -40,14 +42,19 @@ const useUser = () => {
                 body: JSON.stringify(userData),
             });
             if (response.ok) {
-                setUsers((prevUsers) => [...prevUsers, userData]);
+                if (!users) {
+                    setUsers([userData]);
+                } else {
+                    setUsers((prevUsers) => [...(prevUsers || []), userData]);
+                }
             }
         } catch (error) {
+            console.error('Error adding user:', error);
             setError('Failed to add user');
         }
     };
 
-    const updateUser = async (userData: any) => {
+    const updateUser = async (userData: User) => {
         try {
             const response = await fetch(`/api/user/${userData.id}`, {
                 method: 'PUT',
@@ -57,9 +64,10 @@ const useUser = () => {
                 body: JSON.stringify(userData),
             });
             if (response.ok) {
-                setUsers((prevUsers) => [...prevUsers, userData]);
+                setUsers((prevUsers) => prevUsers?.map((user) => user.id === userData.id ? userData : user));
             }
         } catch (error) {
+            console.error('Error updating user:', error);
             setError('Failed to update user');
         }
     };

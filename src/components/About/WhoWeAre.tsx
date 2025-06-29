@@ -1,11 +1,47 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
+import { WhoWeAreSection } from "@prisma/client";
 
-const WhoWeAre = () => {
+const WhoWeAre = ({pageData}: {pageData: WhoWeAreSection | null}) => {
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  if(!pageData) return null;
+
   return (
     <AnimatePresence mode="wait">
-      <section className="bg-black flex h-screen">
+      <section className="bg-black flex h-screen relative" >
+        {/* Interactive Background with Mouse Movement */}
+        <motion.div
+              className="absolute inset-0"
+              animate={{
+                background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(239, 68, 68, 0.1) 0%, transparent 50%)`,
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                className="absolute inset-0 opacity-5"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "50px 50px",
+                }}
+              />
+        </motion.div>
         <div className="container m-auto">
           <div className="flex flex-col md:flex-row" data-animation-container>
             {/* Left Column */}
@@ -13,7 +49,7 @@ const WhoWeAre = () => {
               <div className="pr-5">
                 <h2 className="overflow-hidden relative w-fit m-0 leading-[1]">
                     <span className="text-[25px] md:text-[30px] lg:text-[38px] xl:text-[45px] font-bold uppercase text-white tracking-wider">
-                      Who We Are
+                      {pageData.title}  
                     </span>
                     <motion.div
                       initial={{ x: 0 }}
@@ -40,18 +76,12 @@ const WhoWeAre = () => {
                     ease: "easeInOut"
                   }}
                 >
-                  <p
+                  <p  
                     className="text-lg md:text-lg font-(family-name:--font-open-sans) text-[#BCBDBD] leading-[2] mb-10 tracking-normal"
                     data-animation-child
                     data-animation="fade-anim"
                   >
-                    Godard slow-carb chartreuse occupy, tumblr letterpress pok pok
-                    tattooed yr lyft yuccie kinfolk. IPhone kombucha shaman
-                    gastropub snackwave 90&apos;s lo-fi pug chillwave pok pok tofu.
-                    Swag deep v listicle roof party seitan man braid raclette
-                    church-key trust fund locavore vexillologist green juice raw
-                    denim tilde meh. Austin thundercats locavore taiyaki snackwave
-                    hoodie put a bird on it tattooed selvage kitsch ramps.
+                    {pageData.description}
                   </p>
                 </motion.div>
               </div>
@@ -60,15 +90,20 @@ const WhoWeAre = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             {/* Award 1 */}
-            <motion.div
+            {pageData.extras.map((extra, index) => {
+              const extraData = extra as {title: string, list: string[]}
+              const List = extraData?.list as string[]
+              return (
+                <motion.div
                   initial={{ opacity:0, y: 100 }}
                   animate={{ opacity:1, y: 0 }}
                   transition={{
                     duration: .8,
-                    delay: .1,
+                    delay: index * .1,
                     ease: "easeInOut"
                   }}
                   className="mt-12 md:mt-0"
+                  key={index}
                 >
               <h6
                 className="text-white text-sm uppercase font-bold mb-4 relative overflow-hidden inline-block"
@@ -76,75 +111,21 @@ const WhoWeAre = () => {
                 data-animation="title-fill-anim"
                 data-text="FWA"
               >
-                FWA
+                {extraData?.title}
               </h6>
               <ul className="list-outside list-disc ml-6 space-y-2">
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Winnings 2019</p>
-                </li>
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Nominees 2018</p>
-                </li>
+                {List.map((list, index) => {
+                  return (
+                    <li key={index} className="text-red-500">
+                      <p className="text-gray-400 text-xs tracking-[2] uppercase">{list}</p>
+                    </li>
+                  );
+                })}
               </ul>
             </motion.div>
-
-            {/* Award 2 */}
-            <motion.div
-                  initial={{ opacity:0, y: 100 }}
-                  animate={{ opacity:1, y: 0 }}
-                  transition={{
-                    duration: .8,
-                    delay: .2,
-                    ease: "easeInOut"
-                  }}
-                  className="mt-12 md:mt-0"
-                >
-              <h6
-                className="text-white text-sm uppercase font-bold mb-4 relative overflow-hidden inline-block"
-                data-animation-child
-                data-animation="title-fill-anim"
-                data-text="CSS Design Awards"
-              >
-                CSS Design Awards
-              </h6>
-              <ul className="list-outside list-disc ml-6 space-y-2">
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Best developer</p>
-                </li>
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Best graphic design</p>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* Award 3 */}
-            <motion.div
-                  initial={{ opacity:0, y: 100 }}
-                  animate={{ opacity:1, y: 0 }}
-                  transition={{
-                    duration: .8,
-                    delay: .3,
-                    ease: "easeInOut"
-                  }}
-                  className="mt-12 md:mt-0"
-                >
-              <h6
-                className="text-white text-sm uppercase font-bold mb-4 relative overflow-hidden inline-block"
-                data-animation-child
-                data-animation="title-fill-anim"
-                data-text="Awwwards"
-              >
-                Awwwards
-              </h6>
-              <ul className="list-outside list-disc ml-6 space-y-2">
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Best creative agency</p>
-                </li>
-                <li className="text-red-500">
-                  <p className="text-gray-400 text-xs tracking-[2] uppercase">Best Services</p>
-                </li>
-              </ul>
-            </motion.div>
+            )
+            })}
+          
           </div>
         </div>
       </section>

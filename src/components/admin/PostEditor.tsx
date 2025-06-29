@@ -61,12 +61,12 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h6" gutterBottom>
             {isNew ? 'Create New Post' : 'Edit Post'}
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
             fullWidth
@@ -75,7 +75,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, title: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
             fullWidth
@@ -84,7 +84,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, slug: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             required
             fullWidth
@@ -95,7 +95,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData({ ...formData, excerpt: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             required
             fullWidth
@@ -106,7 +106,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData({ ...formData, content: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Featured Image URL"
@@ -114,7 +114,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, featuredImage: e.target.value })}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Box display="flex" alignItems="center">
             <Switch
               checked={formData.published}
@@ -123,7 +123,7 @@ export default function PostEditor({ initialData, isNew = false }: PostEditorPro
             <Typography>Published</Typography>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Button type="submit" variant="contained" color="primary">
             {isNew ? 'Create Post' : 'Save Changes'}
           </Button>

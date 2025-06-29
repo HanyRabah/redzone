@@ -1,0 +1,37 @@
+import { withAuth } from 'next-auth/middleware'
+
+export default withAuth(
+  function middleware(req) {
+    // Add any additional middleware logic here
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        // Check if user is trying to access admin routes
+        if (req.nextUrl.pathname.startsWith('/admin')) {
+          // Allow access to login page without authentication
+          if (req.nextUrl.pathname === '/admin/login') {
+            // If user is already authenticated, redirect to admin dashboard
+            if (token) {
+              return false // This will trigger a redirect
+            }
+            return true // Allow access to login page
+          }
+          
+          // For all other admin routes, require authentication
+          return !!token
+        }
+        
+        // Allow access to all non-admin routes
+        return true
+      },
+    },
+  }
+)
+
+export const config = {
+  matcher: [
+    '/admin/:path*',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ]
+}

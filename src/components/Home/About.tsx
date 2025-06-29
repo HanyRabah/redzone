@@ -1,11 +1,12 @@
+"use client"
 import React from "react";
 import { motion, useInView } from "framer-motion";
 import { Box } from "@mui/material";
+import { AboutUsSection } from "@prisma/client";
 
 
-const AboutSectionTitle = ["WE ARE CREATIVE", "WE ARE RED ZONE"];
+const RedZoneCreativePageInteractive = ({pageData}: {pageData: AboutUsSection | null}) => {
 
-const RedZoneCreativePageInteractive = () => {
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -81,7 +82,7 @@ const RedZoneCreativePageInteractive = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="w-full min-h-screen bg-black text-white relative overflow-hidden py-20">
       {/* Interactive Background with Mouse Movement */}
       <motion.div
         className="absolute inset-0"
@@ -114,7 +115,7 @@ const RedZoneCreativePageInteractive = () => {
           {/* Main Headlines with Enhanced Left to Right Animation */}
           <div className="text-center overflow-hidden">
             <h2 className="text-[40px] md:text-[50px] lg:text-[65px] font-bold uppercase text-white tracking-[-2px]">
-              {AboutSectionTitle.map((line, index) => (
+              {pageData?.titleLines.map((line, index) => (
                 <Box key={index} className="overflow-hidden relative  w-fit text-center"> 
                     <motion.span
                       variants={titleVariants}
@@ -132,46 +133,6 @@ const RedZoneCreativePageInteractive = () => {
               ))}
             </h2>
 
-            {/* First Line - WE ARE CREATIVE */}
-
-            {/* <motion.div className="mb-4" variants={titleVariants} custom={0}>
-              <Box className="overflow-hidden relative  w-fit text-center">
-                <motion.div
-                  custom={0}
-                  variants={textVariants}
-                  className="relative"
-                >
-                  <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold uppercase text-white tracking-wider">
-                    {"WE ARE CREATIVE"}
-                  </h1>
-                </motion.div>
-                <motion.div
-                  custom={0}
-                  variants={overlayVariants}
-                  className="absolute inset-0 bg-black"
-                />
-              </Box>
-            </motion.div> */}
-
-            {/* Second Line - WE ARE RED ZONE */}
-            {/* <motion.div variants={titleVariants} custom={1}>
-            <Box className="overflow-hidden relative  w-fit text-center">
-                <motion.div
-                  custom={1}
-                  variants={textVariants}
-                  className="relative"
-                >
-                  <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold uppercase text-white tracking-wider">
-                    {"WE ARE RED ZONE"}
-                  </h1>
-                </motion.div>
-                <motion.div
-                  custom={1}
-                  variants={overlayVariants}
-                  className="absolute inset-0 bg-black"
-                />
-              </Box>
-            </motion.div> */}
           </div>
 
           {/* Description Columns with Enhanced Fade In from Bottom */}
@@ -196,14 +157,7 @@ const RedZoneCreativePageInteractive = () => {
                   />
                   <p className="text-gray-300 group-hover:text-white transition-colors duration-300 
                   text-sm sm:text-base lg:text-base leading-8 font-medium font-[Open_Sans] tracking-wider">
-                    Affogato thundercats quinoa, portland cold-pressed edison
-                    bulb artisan paleo banjo tousled try-hard food truck pop-up
-                    bushwick godard. Occupy 90&apos;s try-hard tote bag chicharrones
-                    stumptown polaroid hashtag cliche +1, tousled fanny pack.
-                    Tote bag iPhone crucifix hella helvetica food truck bicycle
-                    rights cloud bread. Yr iPhone asymmetrical, next level
-                    vexillologist godard blog green juice chia. Tacos jean
-                    shorts pickled PBR&B poutine.
+                   {pageData?.contentLines[0]}
                   </p>
                 </motion.div>
               </motion.div>
@@ -227,14 +181,7 @@ const RedZoneCreativePageInteractive = () => {
                   />
                   <p className="ext-gray-300 group-hover:text-white transition-colors duration-300 
                   text-sm sm:text-base lg:text-base leading-8 font-medium font-[Open_Sans] tracking-wider">
-                    Godard slow-carb chartreuse occupy, tumblr letterpress pok
-                    pok tattooed yr lyft yuccie kinfolk. IPhone kombucha shaman
-                    gastropub snackwave 90&apos;s lo-fi pug chillwave pok pok tofu.
-                    Swag deep v listicle roof party seitan man braid raclette
-                    church-key trust fund locavore vexillologist green juice raw
-                    DRenim tilde meh. Austin thundercats locavore taiyaki
-                    snackwave hoodie put a bird on it tattooed selvage kitsch
-                    ramps.
+                   {pageData?.contentLines[1]}
                   </p>
                 </motion.div>
               </motion.div>
@@ -244,14 +191,14 @@ const RedZoneCreativePageInteractive = () => {
               variants={contentVariants}
               custom={2}
             >
-                GODARD SLOW-CARB CHARTREUSE OCCUPY, TUMBLR LETTERPRESS
+                {pageData?.closeLine}
             </motion.div>
           </div>
         </div>
       </motion.div>
- 
     </div>
   );
 };
 
 export default RedZoneCreativePageInteractive;
+

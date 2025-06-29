@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth-options';
 
 export async function GET() {
-  const posts = await prisma.blog.findMany({
+  const posts = await prisma.blogPost.findMany({
     orderBy: {
       updatedAt: 'desc',
     },
@@ -21,16 +21,16 @@ export async function POST(request: NextRequest) {
   }
 
   const json = await request.json();
-  const { title, content, slug, excerpt, featuredImage, published } = json;
+  const { title, content, slug, excerpt, image } = json;
 
-  const post = await prisma.blog.create({
+  const post = await prisma.blogPost.create({
     data: {
       title,
       content,
       slug,
       excerpt,
-      featuredImage,
-      published,
+      image,
+      publishedAt: new Date(),
     },
   });
 
@@ -45,17 +45,16 @@ export async function PUT(request: NextRequest) {
   }
 
   const json = await request.json();
-  const { id, title, content, slug, excerpt, featuredImage, published } = json;
+  const { id, title, content, slug, excerpt, image } = json;
 
-  const post = await prisma.blog.update({
+  const post = await prisma.blogPost.update({
     where: { id },
     data: {
       title,
       content,
       slug,
       excerpt,
-      featuredImage,
-      published,
+      image,
     },
   });
 
@@ -76,7 +75,7 @@ export async function DELETE(request: NextRequest) {
     return new NextResponse('Missing id', { status: 400 });
   }
 
-  await prisma.blog.delete({
+  await prisma.blogPost.delete({
     where: { id },
   });
 

@@ -46,10 +46,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           {isLoading && <LoadingScreen />}
         </AnimatePresence>
 
-        <Header 
-          isMenuOpen={isMenuOpen} 
-          setIsMenuOpen={setIsMenuOpen} 
-        />
+        <Header />
         
         <Navigation 
           isOpen={isMenuOpen} 
