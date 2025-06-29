@@ -292,16 +292,16 @@ export default function WhoWeAreSectionForm({ initialData }: WhoWeAreSectionForm
               }
               title="Additional Sections"
               subheader={`${formData.extras.length} section${formData.extras.length !== 1 ? 's' : ''} configured`}
-              // action={
-              //   <Button
-              //     variant="contained"
-              //     startIcon={<AddIcon />}
-              //     onClick={addExtra}
-              //     sx={{ borderRadius: 2 }}
-              //   >
-              //     Add Section
-              //   </Button>
-              // }
+              action={
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={addExtra}
+                  sx={{ borderRadius: 2 }}
+                >
+                  Add Section
+                </Button>
+              }
             />
             <CardContent sx={{ p: 0 }}>
               {formData.extras.length === 0 ? (

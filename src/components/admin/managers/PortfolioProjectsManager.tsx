@@ -42,18 +42,14 @@ import {
 } from '@mui/icons-material'
 import { toast } from 'sonner'
 import ProjectForm from '@/components/admin/forms/ProjectForm'
-import { Project } from '@prisma/client'
+import { Project, ProjectCategory } from '@prisma/client'
 
  
 
-interface Category {
-  name: string
-  count: number
-}
 
 interface PortfolioProjectsManagerProps {
   projects: Project[]
-  categories: Category[]
+  categories: ProjectCategory[]
 }
 
 export default function PortfolioProjectsManager({ projects, categories }: PortfolioProjectsManagerProps) {
@@ -61,7 +57,7 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all')
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
   // Filter projects based on search and filters
@@ -69,9 +65,9 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
     return projects.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           project.category.toLowerCase().includes(searchTerm.toLowerCase())
+                           project.categoryId?.toLowerCase().includes(searchTerm.toLowerCase())
       
-      const matchesCategory = selectedCategory === 'all' || project.category === selectedCategory
+      const matchesCategory = selectedCategoryId === 'all' || categories.find(cat => cat.id === project.categoryId)?.name === selectedCategoryId
       
       const matchesStatus = statusFilter === 'all' || 
                            (statusFilter === 'active' && project.isActive) ||
@@ -80,7 +76,7 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
       
       return matchesSearch && matchesCategory && matchesStatus
     })
-  }, [projects, searchTerm, selectedCategory, statusFilter])
+  }, [projects, searchTerm, selectedCategoryId, statusFilter, categories])
 
   const openEditDialog = (project: Project) => {
     setEditingProject(project)
@@ -249,14 +245,14 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel>Category</InputLabel>
             <Select
-              value={selectedCategory}
+              value={selectedCategoryId}
               label="Category"
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
             >
               <MenuItem value="all">All Categories</MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.name} value={category.name}>
-                  {category.name} ({category.count})
+                  {category.name} ({category.postCount})
                 </MenuItem>
               ))}
             </Select>
@@ -293,13 +289,13 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
         <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 3 }}>
           <WorkIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h6" color="text.secondary" gutterBottom>
-            {searchTerm || selectedCategory !== 'all' || statusFilter !== 'all'
+            {searchTerm || categories.find(cat => cat.name === selectedCategoryId)?.name !== 'all' || statusFilter !== 'all'
               ? 'No projects match your filters'
               : 'No projects found'
             }
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {!searchTerm && selectedCategory === 'all' && statusFilter === 'all' && 
+            {!searchTerm && categories.find(cat => cat.name === selectedCategoryId)?.name === 'all' && statusFilter === 'all' && 
               'Get started by adding your first project'
             }
           </Typography>
@@ -367,7 +363,7 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
                           />
                         )}
                         <Chip
-                          label={project.category}
+                          label={categories.find(cat => cat.id === project.categoryId)?.name}
                           size="small"
                           sx={{
                             bgcolor: alpha('#1976d2', 0.9),
@@ -492,7 +488,7 @@ export default function PortfolioProjectsManager({ projects, categories }: Portf
           {/* Uncomment when ProjectForm is available */}
           <ProjectForm 
             project={editingProject} 
-            categories={categories.map(c => c.name)}
+            categories={categories}
             onClose={() => setIsDialogOpen(false)}
           />
           <Box sx={{ p: 4, textAlign: 'center' }}>

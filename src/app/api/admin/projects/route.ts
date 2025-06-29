@@ -7,7 +7,7 @@ import type { Prisma } from '@prisma/client'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category')
+    const categoryId = searchParams.get('categoryId')
     const status = searchParams.get('status')
     const featured = searchParams.get('featured')
     const search = searchParams.get('search')
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     const where: Prisma.ProjectWhereInput = {}
 
     // Filter by category
-    if (category && category !== 'all') {
-      where.category = category
+    if (categoryId && categoryId !== 'all') {
+      where.categoryId = categoryId
     }
 
     // Filter by status
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
-        { category: { contains: search, mode: 'insensitive' } }
+        { categoryId: { contains: search, mode: 'insensitive' } }
       ]
     }
 
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
     }
 
-    if (!data.category?.trim()) {
+    if (!data.categoryId) {
       return NextResponse.json({ error: 'Category is required' }, { status: 400 })
     }
 
@@ -113,18 +113,34 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
+
     const project = await prisma.project.create({
       data: {
         title: data.title.trim(),
-        category: data.category.trim(),
         description: data.description.trim(),
+        content: data.content.trim(),
         image: data.image.trim(),
         link: data.link?.trim() || null,
+        client: data.client.trim(),
+        role: data.role.trim(),
+        year: data.year ? parseInt(data.year) : null,
         slug,
         isActive: data.isActive ?? true,
         isFeatured: data.isFeatured ?? false,
         sortOrder: data.sortOrder || 0,
+        category: {
+          connect: { id: data.categoryId }
+        }
       },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true
+          }
+        }
+      }
     })
 
     return NextResponse.json(project, { status: 201 })

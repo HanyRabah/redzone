@@ -1,6 +1,5 @@
-// prisma/seed.ts
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+//import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -8,21 +7,21 @@ async function main() {
   console.log("🌱 Starting seed...");
 
   // Create admin user
-  const hashedPassword = await bcrypt.hash("admin123", 10);
+  //const hashedPassword = await bcrypt.hash("admin123", 10);
 
-  const adminUser = await prisma.user.upsert({
-    where: { email: "admin@test.com" },
-    update: {},
-    create: {
-      email: "admin@test.com",
-      name: "Admin User",
-      password: hashedPassword,
-      role: "admin", // Fixed: lowercase 'admin' instead of 'ADMIN'
-      emailVerified: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  });
+  // const adminUser = await prisma.user.upsert({
+  //   where: { email: "admin@test.com" },
+  //   update: {},
+  //   create: {
+  //     email: "admin@test.com",
+  //     name: "Admin User",
+  //     password: hashedPassword,
+  //     role: "admin", // Fixed: lowercase 'admin' instead of 'ADMIN'
+  //     emailVerified: new Date(),
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   },
+  // });
   console.log("✅ Admin user created");
 
   // Create Hero Sections for all pages
@@ -228,54 +227,54 @@ async function main() {
   console.log("✅ About Us section created");
 
   // Create Projects
-  const projects = [
-    {
-      id: "1",
-      category: "Commercial",
-      title: "Bushwick Selfies Pork Belly Lyft Brooklyn Messenger",
-      description:
-        "Narwhal pop-up intelligentsia tbh pinterest, microdosing tilde cloud bread gochujang tattooed leggings cornhole 8-bit. Austin fam chia cold-pressed raw denim. Glossier drinking vinegar portland lo-fi, polaroid bespoke lomo. Banjo art party XOXO, fashion axe sustainable retro ethical gentrify.",
-      image:
-        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      slug: "bushwick-selfies-project",
-      link: "/project/1",
-      isFeatured: true,
-      sortOrder: 1,
-    },
-    {
-      id: "2",
-      category: "Branding",
-      title: "Craft Beer Artisan Wolf Copper Mug Raw Denim",
-      description:
-        "Green juice roof party kombucha mixtape chartreuse. Tofu retro cold-pressed letterpress coloring book gastropub yr asymmetrical cred bicycle rights snackwave XOXO raw denim keytar.",
-      image:
-        "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      slug: "craft-beer-branding",
-      link: "/project/2",
-      isFeatured: true,
-      sortOrder: 2,
-    },
-    {
-      id: "3",
-      category: "Web Design",
-      title: "Intelligentsia Wolf Gastropub Twee Lomo",
-      description:
-        "Scenester semiotics plaid, vegan four loko vinyl twee bicycle rights letterpress you probably haven't heard of them before they sold out. Activated charcoal master cleanse.",
-      image:
-        "https://images.pexels.com/photos/3184639/pexels-photo-3184639.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      slug: "intelligentsia-web-design",
-      link: "/project/3",
-      sortOrder: 3,
-    },
-  ];
+  // const projects = [
+  //   {
+  //     id: "1",
+  //     category: "Commercial",
+  //     title: "Bushwick Selfies Pork Belly Lyft Brooklyn Messenger",
+  //     description:
+  //       "Narwhal pop-up intelligentsia tbh pinterest, microdosing tilde cloud bread gochujang tattooed leggings cornhole 8-bit. Austin fam chia cold-pressed raw denim. Glossier drinking vinegar portland lo-fi, polaroid bespoke lomo. Banjo art party XOXO, fashion axe sustainable retro ethical gentrify.",
+  //     image:
+  //       "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+  //     slug: "bushwick-selfies-project",
+  //     link: "/project/1",
+  //     isFeatured: true,
+  //     sortOrder: 1,
+  //   },
+  //   {
+  //     id: "2",
+  //     category: "Branding",
+  //     title: "Craft Beer Artisan Wolf Copper Mug Raw Denim",
+  //     description:
+  //       "Green juice roof party kombucha mixtape chartreuse. Tofu retro cold-pressed letterpress coloring book gastropub yr asymmetrical cred bicycle rights snackwave XOXO raw denim keytar.",
+  //     image:
+  //       "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+  //     slug: "craft-beer-branding",
+  //     link: "/project/2",
+  //     isFeatured: true,
+  //     sortOrder: 2,
+  //   },
+  //   {
+  //     id: "3",
+  //     category: "Web Design",
+  //     title: "Intelligentsia Wolf Gastropub Twee Lomo",
+  //     description:
+  //       "Scenester semiotics plaid, vegan four loko vinyl twee bicycle rights letterpress you probably haven't heard of them before they sold out. Activated charcoal master cleanse.",
+  //     image:
+  //       "https://images.pexels.com/photos/3184639/pexels-photo-3184639.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+  //     slug: "intelligentsia-web-design",
+  //     link: "/project/3",
+  //     sortOrder: 3,
+  //   },
+  // ];
 
-  for (const projectData of projects) {
-    await prisma.project.upsert({
-      where: { id: projectData.id },
-      update: projectData,
-      create: projectData,
-    });
-  }
+  // for (const projectData of projects) {
+  //   await prisma.project.upsert({
+  //     where: { id: projectData.id },
+  //     update: projectData,
+  //     create: projectData,
+  //   });
+  // }
   console.log("✅ Projects created");
 
   // Create Clients

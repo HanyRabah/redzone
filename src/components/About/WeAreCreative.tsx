@@ -43,13 +43,13 @@ const WeAreCreative = ({
             {pageData?.title}
           </h2>
           <div className="space-y-6">
-            <p
+            <div
               className="text-lg text-gray-700 leading-relaxed"
               data-animation-child
               data-animation="fade-anim"
             >
-              {pageData?.description}
-            </p>
+              <div dangerouslySetInnerHTML={{ __html: pageData?.description || '' }} />
+            </div>
             {/* <p
               className="text-gray-600"
               data-animation-child

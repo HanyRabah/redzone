@@ -41,8 +41,6 @@ export default function ImageUpload({
     setIsUploading(true)
     setUploadProgress(0)
 
-
-
     try {
       const formData = new FormData()
       formData.append('file', file)
@@ -65,7 +63,6 @@ export default function ImageUpload({
       console.log("🚀 ~ handleFileSelect ~ response:", response)
 
       const data = await response.json()
-      console.log("🚀 ~ handleFileSelect ~ data:", data)
       clearInterval(progressInterval)
       setUploadProgress(100)
       

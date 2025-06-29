@@ -23,7 +23,7 @@ export async function GET() {
       prisma.project.count({ where: { isActive: true } }),
       prisma.project.count({ where: { isFeatured: true } }),
       prisma.project.groupBy({
-        by: ['category'],
+        by: ['categoryId'],
         _count: {
           id: true
         }
@@ -43,7 +43,7 @@ export async function GET() {
     ])
 
     const categoryStats = categories.map(cat => ({
-      name: cat.category,
+      name: cat.categoryId,
       count: cat._count.id
     }))
 

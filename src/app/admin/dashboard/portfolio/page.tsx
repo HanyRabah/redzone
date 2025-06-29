@@ -15,25 +15,13 @@ async function getPortfolioData() {
     }),    prisma.project.findMany({ 
       orderBy: { sortOrder: 'asc' }
     }),
-    // Get unique categories from projects
-    prisma.project.groupBy({
-      by: ['category'],
-      where: {
-        isActive: true
-      },
-      _count: {
-        id: true
-      }
-    })
+    prisma.projectCategory.findMany()
   ])
 
   return {
     heroSlider,
     projects,
-    categories: categories.map(cat => ({
-      name: cat.category,
-      count: cat._count.id
-    }))
+    categories
   }
 }
 

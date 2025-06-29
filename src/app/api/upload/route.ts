@@ -6,13 +6,11 @@ import { put } from '@vercel/blob'
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    console.log("🚀 ~ POST ~ session:", session)
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const formData = await request.formData()
-    console.log("🚀 ~ POST ~ formData:", formData)
     const file = formData.get('file') as File
 
     if (!file) {

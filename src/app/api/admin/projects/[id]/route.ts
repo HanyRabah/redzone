@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-options'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -21,20 +22,56 @@ export async function PUT(
 
     const data = await request.json()
     const { id } = await params
+
+    if (data.categoryId) {
+      const categoryExists = await prisma.projectCategory.findUnique({
+        where: { id: data.categoryId }
+      })
+      console.log(categoryExists)
+      if (!categoryExists) {
+        throw new Error('Category not found')
+      }
+    }
     
+    const updateData: Prisma.ProjectUpdateInput = {
+      title: data.title,
+      description: data.description,
+      content: data.content,
+      image: data.image,
+      link: data.link,
+      slug: data.slug,
+      client: data.client,        
+      role: data.role,            
+      year: data.year ? parseInt(data.year) : null, 
+      isActive: data.isActive,
+      isFeatured: data.isFeatured,
+      sortOrder: data.sortOrder,
+    }
+
+    // Handle category relationship
+    if (data.categoryId && data.categoryId !== "") {
+      updateData.category = {
+        connect: { id: data.categoryId }
+      }
+    } else {
+      // Disconnect category if none selected
+      updateData.category = {
+        disconnect: true
+      }
+    }
+
     const project = await prisma.project.update({
       where: { id },
-      data: {
-        title: data.title,
-        category: data.category,
-        description: data.description,
-        image: data.image,
-        link: data.link,
-        slug: data.slug,
-        isActive: data.isActive,
-        isFeatured: data.isFeatured,
-        sortOrder: data.sortOrder,
-      },
+      data: updateData,
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true
+          }
+        }
+      }
     })
 
     return NextResponse.json(project)

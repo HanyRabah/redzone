@@ -31,7 +31,6 @@ import {
   Palette as PaletteIcon,
   Image as ImageIcon,
   Title as TitleIcon,
-  Description as DescriptionIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
   PhotoLibrary as PhotoLibraryIcon,
@@ -39,6 +38,7 @@ import {
 } from '@mui/icons-material'
 import { toast } from 'sonner'
 import ImageUpload from '../ImageUpload'
+import AdvancedRichTextEditor from '@/components/RichTextEditor'
 
 interface WeAreCreativeSectionData {
   id?: string
@@ -193,7 +193,7 @@ export default function WeAreCreativeSectionForm({ initialData }: WeAreCreativeS
                   }}
                 />
 
-                <TextField
+                {/* <TextField
                   fullWidth
                   multiline
                   rows={4}
@@ -211,7 +211,12 @@ export default function WeAreCreativeSectionForm({ initialData }: WeAreCreativeS
                   InputProps={{
                     startAdornment: <DescriptionIcon sx={{ color: 'action.active', mr: 1, alignSelf: 'flex-start', mt: 1 }} />
                   }}
-                />
+                /> */}
+
+                <AdvancedRichTextEditor
+                  value={formData.description}
+                  onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                />  
 
                 <FormControlLabel
                   control={

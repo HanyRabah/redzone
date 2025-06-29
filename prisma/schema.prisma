@@ -43,11 +43,11 @@ model User {
   role          String       @default("admin")
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  accounts      Account[]
-  sessions      Session[]
   bio           String?
-  social        UserSocial[]
+  accounts      Account[]
   blogPosts     BlogPost[]   @relation("BlogPostAuthor")
+  sessions      Session[]
+  social        UserSocial[]
 }
 
 model UserSocial {
@@ -56,6 +56,8 @@ model UserSocial {
   url      String
   userId   String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique(name: "user_social_unique", fields: [platform, userId])
 }
 
 model VerificationToken {
@@ -124,18 +126,33 @@ model AboutUsSection {
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  category    String
+  id          String           @id @default(cuid())
   title       String
   description String
   image       String
   link        String?
-  slug        String   @unique
-  isActive    Boolean  @default(true)
-  isFeatured  Boolean  @default(false)
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  slug        String           @unique
+  isActive    Boolean          @default(true)
+  isFeatured  Boolean          @default(false)
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  categoryId  String?
+  content     String?          @default("")
+  client      String?
+  year        Int?
+  role        String?
+  category    ProjectCategory? @relation("ProjectToCategory", fields: [categoryId], references: [id])
+}
+
+model ProjectCategory {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String
+  postCount Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[] @relation("ProjectToCategory")
 }
 
 model Client {
@@ -150,20 +167,13 @@ model Client {
 }
 
 model BlogPost {
-  id      String  @id @default(cuid())
-  title   String
-  slug    String  @unique
-  excerpt String
-  content String
-  image   String?
-
-  authorId String?
-  author   User?   @relation("BlogPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-
-  categoryId     String         @default("")
+  id             String         @id @default(cuid())
+  title          String
+  slug           String         @unique
+  excerpt        String
+  content        String
+  image          String?
   publishedAt    DateTime?
-  categories     BlogCategory[] @relation("categories")
-  tags           BlogTag[]      @relation("tags")
   isPublished    Boolean        @default(false)
   isFeatured     Boolean        @default(false)
   seoTitle       String?
@@ -171,6 +181,11 @@ model BlogPost {
   seoKeywords    String[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  authorId       String?
+  categoryId     String         @default("")
+  author         User?          @relation("BlogPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  categories     BlogCategory[] @relation("categories")
+  tags           BlogTag[]      @relation("tags")
 }
 
 model BlogCategory {
@@ -178,9 +193,9 @@ model BlogCategory {
   name      String     @unique
   slug      String     @unique
   postCount Int        @default(0)
-  posts     BlogPost[] @relation("categories")
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  posts     BlogPost[] @relation("categories")
 }
 
 model BlogTag {
@@ -188,9 +203,9 @@ model BlogTag {
   name      String     @unique
   slug      String     @unique
   postCount Int        @default(0)
-  posts     BlogPost[] @relation("tags")
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  posts     BlogPost[] @relation("tags")
 }
 
 model Testimonial {

@@ -16,7 +16,7 @@ const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
   project,
   index,
 }) => {
-  const articleRef = useRef<HTMLDivElement>(null);
+   const articleRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(articleRef, {
     once: true,
     margin: "-200px",
@@ -115,7 +115,7 @@ const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
               <span
                 className={`uppercase tracking-widest text-sm font-bold text-red-500`}
               >
-                {project.category}
+                {project.categoryId}
               </span>
             </motion.div>
 
@@ -154,7 +154,7 @@ const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
             {/* Read More Button */}
 
             <Link
-              href={project.link || "#"}
+              href={`/portfolio/${project.slug}`}
               className="group w-fit flex items-center space-x-3 bg-black text-white px-8 py-4 uppercase tracking-[6px] text-sm font-semibold transition-all duration-300"
             >
               <span>Read More</span>

@@ -22,10 +22,10 @@ export async function POST(request: NextRequest) {
       // Move all projects in this category to "Uncategorized"
       await prisma.project.updateMany({
         where: {
-          category: categoryName
+          categoryId: categoryName
         },
         data: {
-          category: 'Uncategorized'
+          categoryId: 'Uncategorized'
         }
       })
     } else {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Box, Avatar } from "@mui/material";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,8 +7,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import { Testimonial } from "@prisma/client";
 
 const Testimonials = ({ pageData }: { pageData: Testimonial[] }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
+ 
   return (
     <div className="bg-[#f0f0f0] py-30 px-4">
       <Swiper
@@ -16,16 +15,14 @@ const Testimonials = ({ pageData }: { pageData: Testimonial[] }) => {
         spaceBetween={30}
         slidesPerView={1}
         pagination={{
-          el: ".testimonials-pagination",
-          clickable: true,
-          bulletClass: "testimonial-bullet",
-          bulletActiveClass: "testimonial-bullet-active",
+          el: "#testimonials-pagination",
+          type: "bullets",
+          clickable: true, 
         }}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
         }}
-        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         className="h-full"
         speed={1000}
       >
@@ -62,20 +59,22 @@ const Testimonials = ({ pageData }: { pageData: Testimonial[] }) => {
         ))}
       </Swiper>
       {/* Custom Pagination */}
-      <div className="testimonials-pagination flex items-center justify-center space-x-6 mt-12">
-        {pageData.map((_, index) => (
-          <motion.div
-            key={index}
-            className={`testimonial-bullet w-2 h-2 rounded-full transition-all duration-300 ${
-              activeIndex === index
-                ? "testimonial-bullet-active bg-black scale-125"
-                : "bg-gray-400 scale-75"
-            }`}
-            whileHover={{ scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-        ))}
+      <div id="testimonials-pagination" className="flex items-center justify-center space-x-8 mt-20">
+      
       </div>
+      <style jsx global>{`
+        .swiper-pagination-bullet{
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: var(--foreground);
+          transition: all 0.3s ease-in-out;
+        }
+        .swiper-pagination-bullet-active{
+          background-color: var(--foreground);
+          transform: scale(1.5);
+        }
+      `}</style>
     </div>
   );
 };

@@ -34,6 +34,7 @@ export default function TestimonialForm({ testimonial, onClose }: { testimonial:
       }
       setFormData(prev => ({ ...prev, rating: value }))
     }
+
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
       setIsLoading(true)
@@ -44,7 +45,7 @@ export default function TestimonialForm({ testimonial, onClose }: { testimonial:
           : '/api/admin/testimonials'
         
         const method = testimonial ? 'PUT' : 'POST'
-  
+        debugger
         const response = await fetch(url, {
           method,
           headers: {

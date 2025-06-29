@@ -745,7 +745,6 @@ export default function HeroSliderForm({
                                     label="Background Image"
                                     value={slide.backgroundImage || ""}
                                     onChange={(backgroundImage) => {
-                                      console.log("🚀 ~ {slides.map ~ backgroundImage:", backgroundImage)
                                       updateSlide(index, { backgroundImage })
                                     }}
                                   />

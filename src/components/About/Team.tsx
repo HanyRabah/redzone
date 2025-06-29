@@ -139,7 +139,7 @@ const Team = ({
                       data-animation="fade-anim"
                     >
                       {member.designation}
-                      <motion.div
+                      <motion.span
                         variants={overlayVariants}
                         initial="hidden"
                         animate="visible"

@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -12,7 +13,7 @@ import TableRow from '@tiptap/extension-table-row';
 import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
 import Youtube from '@tiptap/extension-youtube';
-import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaHighlighter, FaImage, FaItalic, FaLink, FaListOl, FaListUl, FaQuoteLeft, FaQuoteRight, FaRedo, FaTable, FaUnderline, FaUndo } from 'react-icons/fa';
+import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaHighlighter, FaImage, FaItalic, FaLink, FaListOl, FaListUl, FaQuoteLeft, FaQuoteRight, FaRedo, FaTable, FaUnderline, FaUndo, FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import ImageUpload from '../admin/ImageUpload';
 import { Dialog } from '@mui/material';
 
@@ -71,6 +72,166 @@ const CustomQuote = Extension.create({
     };
   },
 });
+
+const TableDialog = ({ isOpen, onClose, onAdd }: { isOpen: boolean, onClose: () => void, onAdd: (rows: number, cols: number, withHeaderRow: boolean) => void }) => {
+  const [rows, setRows] = useState(3);
+  const [cols, setCols] = useState(3);
+  const [withHeaderRow, setWithHeaderRow] = useState(true);
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAdd(rows, cols, withHeaderRow);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <h3 className="text-lg font-semibold mb-4">Insert Table</h3>
+        
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Rows</label>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRows(Math.max(1, rows - 1))
+                  }}
+                  className="p-1 rounded border hover:bg-gray-100"
+                >
+                  <FaMinus size={12} />
+                </button>
+                <input
+                  type="number"
+                  value={rows}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRows(Math.max(1, parseInt(e.target.value) || 1))
+                  }}
+                  min="1"
+                  max="20"
+                  className="w-16 px-2 py-1 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRows(Math.min(20, rows + 1))
+                  }}
+                  className="p-1 rounded border hover:bg-gray-100"
+                >
+                  <FaPlus size={12} />
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2">Columns</label>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCols(Math.max(1, cols - 1))
+                  }}
+                  className="p-1 rounded border hover:bg-gray-100"
+                >
+                  <FaMinus size={12} />
+                </button>
+                <input
+                  type="number"
+                  value={cols}
+                  onChange={(e) => setCols(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1"
+                  max="10"
+                  className="w-16 px-2 py-1 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCols(Math.min(10, cols + 1))
+                  }}
+                  className="p-1 rounded border hover:bg-gray-100"
+                >
+                  <FaPlus size={12} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={withHeaderRow}
+                onChange={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setWithHeaderRow(e.target.checked)
+                }}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium">Include header row</span>
+            </label>
+          </div>
+
+          {/* Preview */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Preview</label>
+            <div className="border rounded p-2 bg-gray-50">
+              <table className="w-full text-xs">
+                {withHeaderRow && (
+                  <thead>
+                    <tr>
+                      {Array.from({ length: cols }, (_, i) => (
+                        <th key={i} className="border border-gray-300 px-1 py-0.5 bg-gray-200 text-center">
+                          Header {i + 1}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                )}
+                <tbody>
+                  {Array.from({ length: withHeaderRow ? rows - 1 : rows }, (_, i) => (
+                    <tr key={i}>
+                      {Array.from({ length: cols }, (_, j) => (
+                        <td key={j} className="border border-gray-300 px-1 py-0.5 text-center">
+                          Cell
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 mt-6">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleAdd}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Insert Table
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const QuoteDialog = ({ isOpen, onClose, onAdd }: { isOpen: boolean, onClose: () => void, onAdd: (quote: { quote: string, author: string, source: string }) => void }) => {
   const [quote, setQuote] = useState('');
@@ -167,6 +328,7 @@ const AdvancedRichTextEditor = ({
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [quoteDialogOpen, setQuoteDialogOpen] = useState(false);
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [tableDialogOpen, setTableDialogOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
 
   const editor = useEditor({
@@ -209,6 +371,7 @@ const AdvancedRichTextEditor = ({
       CustomQuote,
     ],
     content: value,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -245,6 +408,12 @@ const AdvancedRichTextEditor = ({
     }
   };
 
+  const addTable = (rows: number, cols: number, withHeaderRow: boolean) => {
+    if (editor) {
+      editor.chain().focus().insertTable({ rows, cols, withHeaderRow }).run();
+    }
+  };
+
   const addLink = () => {
     if (linkUrl && editor) {
       editor.chain().focus().setLink({ href: linkUrl }).run();
@@ -267,6 +436,8 @@ const AdvancedRichTextEditor = ({
   );
 
   if (!editor) return null;
+
+  const isInTable = editor.isActive('table');
 
   return (
     <div className={`border border-gray-300 rounded-lg overflow-hidden ${className}`}>
@@ -323,14 +494,6 @@ const AdvancedRichTextEditor = ({
           title="Underline"
         >
           <FaUnderline /> 
-        </ToolbarButton>
-        <ToolbarButton
-          disabled={!editor}
-          onClick={() => editor.chain().focus().insertTable({ rows: 2, cols: 2, withHeaderRow: true }).run()}
-          isActive={editor.isActive('table')}
-          title="Table"
-        >
-          <FaTable />
         </ToolbarButton>
 
         <ToolbarButton
@@ -434,6 +597,106 @@ const AdvancedRichTextEditor = ({
 
         <div className="w-px h-8 bg-gray-300 mx-1"></div>
 
+        {/* Table Controls */}
+        <ToolbarButton
+          disabled={!editor}
+          onClick={() => setTableDialogOpen(true)}
+          isActive={editor.isActive('table')}
+          title="Insert Table"
+        >
+          <FaTable />
+        </ToolbarButton>
+
+        {/* Table editing controls - only show when cursor is in a table */}
+        {isInTable && (
+          <>
+            <div className="w-px h-8 bg-gray-300 mx-1"></div>
+            
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().addRowBefore().run()}
+              isActive={false}
+              title="Add Row Above"
+            >
+              <div className="flex flex-col items-center">
+                <FaPlus size={8} />
+                <div className="w-3 h-px bg-current mt-0.5"></div>
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().addRowAfter().run()}
+              isActive={false}
+              title="Add Row Below"
+            >
+              <div className="flex flex-col items-center">
+                <div className="w-3 h-px bg-current mb-0.5"></div>
+                <FaPlus size={8} />
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().addColumnBefore().run()}
+              isActive={false}
+              title="Add Column Before"
+            >
+              <div className="flex items-center">
+                <FaPlus size={8} />
+                <div className="w-px h-3 bg-current ml-0.5"></div>
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().addColumnAfter().run()}
+              isActive={false}
+              title="Add Column After"
+            >
+              <div className="flex items-center">
+                <div className="w-px h-3 bg-current mr-0.5"></div>
+                <FaPlus size={8} />
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().deleteRow().run()}
+              isActive={false}
+              title="Delete Row"
+            >
+              <div className="flex flex-col items-center">
+                <FaTrash size={8} />
+                <div className="w-3 h-px bg-current mt-0.5"></div>
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().deleteColumn().run()}
+              isActive={false}
+              title="Delete Column"
+            >
+              <div className="flex items-center">
+                <FaTrash size={8} />
+                <div className="w-px h-3 bg-current ml-0.5"></div>
+              </div>
+            </ToolbarButton>
+
+            <ToolbarButton
+              disabled={!editor}
+              onClick={() => editor.chain().focus().deleteTable().run()}
+              isActive={false}
+              title="Delete Table"
+            >
+              <FaTrash />
+            </ToolbarButton>
+          </>
+        )}
+
+        <div className="w-px h-8 bg-gray-300 mx-1"></div>
+
         {/* History */}
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
@@ -489,6 +752,12 @@ const AdvancedRichTextEditor = ({
         isOpen={quoteDialogOpen}
         onClose={() => setQuoteDialogOpen(false)}
         onAdd={addQuote}
+      />
+
+      <TableDialog
+        isOpen={tableDialogOpen}
+        onClose={() => setTableDialogOpen(false)}
+        onAdd={addTable}
       />
 
       {/* Link Dialog */}
@@ -633,7 +902,7 @@ const AdvancedRichTextEditor = ({
           border-radius: 0.25rem;
         }
 
-        /* Table Styles */
+        /* Enhanced Table Styles */
         .ProseMirror table {
           border-collapse: collapse;
           table-layout: fixed;
@@ -641,25 +910,28 @@ const AdvancedRichTextEditor = ({
           margin: 1rem 0;
           overflow: hidden;
           border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          border: 2px solid #e5e7eb;
         }
 
         .ProseMirror table td,
         .ProseMirror table th {
           min-width: 1em;
           border: 1px solid #d1d5db;
-          padding: 8px 12px;
+          padding: 12px 16px;
           vertical-align: top;
           box-sizing: border-box;
           position: relative;
           background-color: #ffffff;
+          transition: background-color 0.2s ease;
         }
 
         .ProseMirror table th {
-          font-weight: bold;
+          font-weight: 600;
           text-align: left;
-          background-color: #f9fafb;
-          border-bottom: 2px solid #e5e7eb;
+          background-color: #f8fafc;
+          border-bottom: 2px solid #cbd5e1;
+          color: #374151;
         }
 
         .ProseMirror table .selectedCell:after {
@@ -667,8 +939,9 @@ const AdvancedRichTextEditor = ({
           position: absolute;
           content: "";
           left: 0; right: 0; top: 0; bottom: 0;
-          background: rgba(59, 130, 246, 0.1);
+          background: rgba(59, 130, 246, 0.15);
           pointer-events: none;
+          border: 2px solid #3b82f6;
         }
 
         .ProseMirror table .column-resize-handle {
@@ -679,6 +952,12 @@ const AdvancedRichTextEditor = ({
           width: 4px;
           background-color: #3b82f6;
           pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+        }
+
+        .ProseMirror table:hover .column-resize-handle {
+          opacity: 1;
         }
 
         .ProseMirror table p {
@@ -695,8 +974,8 @@ const AdvancedRichTextEditor = ({
           cursor: col-resize;
         }
 
-        /* Table hover effects */
-        .ProseMirror table tr:hover td {
+        /* Enhanced table hover and focus effects */
+        .ProseMirror table tbody tr:hover td {
           background-color: #f8fafc;
         }
 
@@ -704,11 +983,83 @@ const AdvancedRichTextEditor = ({
           background-color: #f1f5f9;
         }
 
-        /* Table focus styles */
+        /* Table cell focus styles */
         .ProseMirror table td:focus,
         .ProseMirror table th:focus {
           outline: 2px solid #3b82f6;
           outline-offset: -2px;
+          background-color: #eff6ff;
+        }
+
+        /* Table row striping for better readability */
+        .ProseMirror table tbody tr:nth-child(even) td {
+          background-color: #fafafa;
+        }
+
+        .ProseMirror table tbody tr:nth-child(even):hover td {
+          background-color: #f3f4f6;
+        }
+
+        /* Table selection styles */
+        .ProseMirror table td.selectedCell,
+        .ProseMirror table th.selectedCell {
+          background-color: #dbeafe !important;
+          border-color: #3b82f6;
+        }
+
+        /* Improved table borders */
+        .ProseMirror table tr:first-child th:first-child {
+          border-top-left-radius: 6px;
+        }
+
+        .ProseMirror table tr:first-child th:last-child {
+          border-top-right-radius: 6px;
+        }
+
+        .ProseMirror table tr:last-child td:first-child {
+          border-bottom-left-radius: 6px;
+        }
+
+        .ProseMirror table tr:last-child td:last-child {
+          border-bottom-right-radius: 6px;
+        }
+
+        /* Table responsiveness */
+        @media (max-width: 768px) {
+          .ProseMirror table {
+            font-size: 0.875rem;
+          }
+          
+          .ProseMirror table td,
+          .ProseMirror table th {
+            padding: 8px 12px;
+          }
+        }
+
+        /* Enhanced resize handle visibility */
+        .ProseMirror table td:hover .column-resize-handle,
+        .ProseMirror table th:hover .column-resize-handle {
+          opacity: 1;
+        }
+
+        /* Table editing indicators */
+        .ProseMirror table .selectedCell::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+          z-index: 1;
+        }
+
+        /* Empty table cell placeholder */
+        .ProseMirror table td:empty::before {
+          content: ' ';
+          display: inline-block;
+          width: 1px;
+          height: 1em;
         }
       `}</style>
     </div>

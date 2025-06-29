@@ -34,21 +34,10 @@ import {
   Warning as WarningIcon
 } from '@mui/icons-material'
 import { toast } from 'sonner'
-
-interface Category {
-  name: string
-  count: number
-}
-
-interface Project {
-  id: string
-  category: string
-  title: string
-  isActive: boolean
-}
+import { Project, ProjectCategory } from '@prisma/client'
 
 interface PortfolioCategoriesManagerProps {
-  categories: Category[]
+  categories: ProjectCategory[]
   projects: Project[]
 }
 
@@ -118,7 +107,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
   }
 
   const handleDeleteCategory = async (categoryName: string) => {
-    const projectsInCategory = projects.filter(p => p.category === categoryName)
+    const projectsInCategory = projects.filter(p => categories.find(cat => cat.id === p.categoryId)?.name === categoryName)
     
     if (projectsInCategory.length > 0) {
       const confirmMessage = `This category has ${projectsInCategory.length} project(s). What would you like to do with them?`
@@ -152,8 +141,8 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
     }
   }
 
-  const maxCount = Math.max(...categories.map(c => c.count), 1)
-  const totalProjects = categories.reduce((sum, cat) => sum + cat.count, 0)
+  const maxCount = Math.max(...categories.map(c => c.postCount), 1)
+  const totalProjects = categories.reduce((sum, cat) => sum + cat.postCount, 0)
 
   const getCategoryColor = (index: number) => {
     const colors = ['#1976d2', '#2e7d32', '#ed6c02', '#9c27b0', '#d32f2f', '#0288d1', '#7b1fa2', '#5d4037']
@@ -233,7 +222,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
           <Grid container spacing={3}>
             {categories.map((category, index) => {
               const categoryColor = getCategoryColor(index)
-              const percentage = (category.count / maxCount) * 100
+              const percentage = (category.postCount / maxCount) * 100
               
               return (
                 <Grid key={category.name} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -269,7 +258,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                               {category.name}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              {category.count} project{category.count !== 1 ? 's' : ''}
+                              {category.postCount} project{category.postCount !== 1 ? 's' : ''}
                             </Typography>
                           </Box>
                         </Box>
@@ -284,12 +273,12 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title={category.count > 0 ? "Cannot delete category with projects" : "Delete Category"}>
+                          <Tooltip title={category.postCount > 0 ? "Cannot delete category with projects" : "Delete Category"}>
                             <span>
                               <IconButton
                                 size="small"
                                 onClick={() => handleDeleteCategory(category.name)}
-                                disabled={category.count > 0}
+                                disabled={category.postCount > 0}
                                 sx={{ color: 'error.main' }}
                               >
                                 <DeleteIcon />
@@ -325,7 +314,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
 
                       <Box sx={{ mt: 2 }}>
                         <Chip
-                          label={`${category.count} projects`}
+                          label={`${category.postCount} projects`}
                           size="small"
                           sx={{
                             bgcolor: alpha(categoryColor, 0.1),
@@ -349,10 +338,10 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
             
             <Stack spacing={3}>
               {categories
-                .sort((a, b) => b.count - a.count)
+                .sort((a, b) => b.postCount - a.postCount)
                 .map((category, index) => {
                   const categoryColor = getCategoryColor(index)
-                  const percentage = (category.count / totalProjects) * 100
+                  const percentage = (category.postCount / totalProjects) * 100
                   
                   return (
                     <Box key={category.name}>
@@ -375,7 +364,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                             {percentage.toFixed(1)}%
                           </Typography>
                           <Chip
-                            label={category.count}
+                            label={category.postCount}
                             size="small"
                             sx={{
                               bgcolor: alpha(categoryColor, 0.1),
@@ -446,7 +435,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
               >
                 <Typography variant="body2">
                   <strong>Warning:</strong> Renaming this category will update all{' '}
-                  {categories.find(c => c.name === editingCategory)?.count || 0} project(s) that use it.
+                  {categories.find(c => c.name === editingCategory)?.postCount || 0} project(s) that use it.
                 </Typography>
               </Alert>
             )}

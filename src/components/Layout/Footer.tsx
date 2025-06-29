@@ -47,8 +47,8 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-black fixed bottom-0 w-full -z-1">
       <div className="container mx-auto py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="col-span-1 md:col-span-2 mb-6 md:mb-0 flex justify-center md:justify-start items-start">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-20">
+          <div className="col-span-1 md:col-span-2 flex justify-center md:justify-start items-start">
             <Image
               src="/images/logo/logo-white.png"
               alt="Red Zone"
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
             />
           </div>
 
-          <div className="col-span-1 mb-6 md:mb-0 md:col-span-3 text-center md:text-left">
+          <div className="col-span-1 md:col-span-2 text-center md:text-left">
             <div className="space-y-2">
               {menuItems.map((item) => (
                 <div key={item.name}>
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="col-span-1 mb-6 md:mb-0 md:col-span-4 mx-auto text-left">
+          <div className="col-span-1 md:col-span-4 mx-auto text-left">
             <div className="space-y-4 text-white">
               <div className="flex md:items-center justify-start">
                 <IoMdMail className="w-4 h-4 mr-3" />
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-3 mx-auto md:ml-auto">
+          <div className="col-span-1 md:col-span-2 mx-auto md:ml-auto"> 
             <div className="space-y-0">
               {socialLinks.map((social, index) => <div key={index}><FlipLink text={social.name} href={social.href} className='align-left' /></div>)}
             </div>

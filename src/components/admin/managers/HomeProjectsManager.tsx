@@ -35,18 +35,9 @@ import {
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { ExternalLinkIcon, BriefcaseBusiness as PortfolioIcon } from 'lucide-react'
+import { Project } from '@prisma/client'
 
 
-interface Project {
-  id: string
-  title: string
-  description: string
-  image: string
-  category: string
-  slug: string
-  isFeatured: boolean
-  isActive: boolean
-}
 
 interface HomeProjectsManagerProps {
   projects: Project[]
@@ -82,7 +73,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
   const activeProjects = projects.filter(project => project.isActive)
   const displayedProjects = showOnlyFeatured ? featuredProjects : projects
 
-  const getCategoryColor = (category: string) => {
+  const getCategoryColor = (categoryId: string) => {
     const colors = {
       'web': '#1976d2',
       'mobile': '#2e7d32', 
@@ -90,7 +81,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
       'branding': '#9c27b0',
       'ecommerce': '#d32f2f'
     }
-    return colors[category.toLowerCase() as keyof typeof colors] || '#757575'
+    return colors[categoryId.toLowerCase() as keyof typeof colors] || '#757575'
   }
 
   return (
@@ -240,7 +231,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
       ) : (
         <Grid container spacing={3} sx={{ mb: 4 }}>
           {displayedProjects.map((project) => {
-            const categoryColor = getCategoryColor(project.category)
+            const categoryColor = getCategoryColor(project.categoryId || 'web')
             
             return (
               <Grid key={project.id} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -290,7 +281,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
                     {/* Category Badge */}
                     <Chip
                       icon={<CategoryIcon />}
-                      label={project.category}
+                      label={project.categoryId}
                       size="small"
                       sx={{
                         position: 'absolute',

@@ -22,23 +22,25 @@ export async function POST(request: NextRequest) {
     const existingCategory = await prisma.project.findFirst({
       where: {
         category: {
-          equals: newName,
-          mode: 'insensitive'
+          name: {
+            equals: newName,
+            mode: 'insensitive'
+          }
         }
       }
     })
 
-    if (existingCategory && existingCategory.category.toLowerCase() !== oldName.toLowerCase()) {
+    if (existingCategory && existingCategory.categoryId !== oldName) {
       return NextResponse.json({ error: 'Category name already exists' }, { status: 400 })
     }
 
     // Update all projects with the old category name
     await prisma.project.updateMany({
       where: {
-        category: oldName
+        categoryId: oldName
       },
       data: {
-        category: newName
+        categoryId: newName
       }
     })
 

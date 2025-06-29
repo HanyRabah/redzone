@@ -58,7 +58,6 @@ function ClientTable<T extends Client>({
   editItem: (item: T) => void;
   deleteItem: (id: string) => void;
 }) {
-  console.log("🚀 ~ data:", data)
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; client: T | null }>({
     open: false,
     client: null
