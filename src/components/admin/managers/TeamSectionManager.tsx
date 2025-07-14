@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
-//import DynamicTextArray from "@/components/admin/DynamicTextArray";
 import ImageUpload from "../ImageUpload";
 import {
   Box,
@@ -47,7 +46,6 @@ import {
   Photo as PhotoIcon,
   Sort as SortIcon,
   Title as TitleIcon,
-  Description as DescriptionIcon
 } from "@mui/icons-material";
 import { TeamMember, TeamSection } from "@prisma/client";
 
@@ -140,7 +138,6 @@ function TeamMemberForm({
     name: member?.name || "",
     designation: member?.designation || "",
     image: member?.image || "",
-    bio: member?.bio || "",
     isActive: member?.isActive ?? true,
     sortOrder: member?.sortOrder || 0,
   });
@@ -247,21 +244,6 @@ function TeamMemberForm({
                   </Grid>
                 </Grid>
 
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Bio (Optional)"
-                  value={formData.bio}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, bio: e.target.value }))
-                  }
-                  placeholder="Brief description about the team member..."
-                  helperText={`${formData.bio.length} characters`}
-                  InputProps={{
-                    startAdornment: <DescriptionIcon sx={{ color: 'action.active', mr: 1, alignSelf: 'flex-start', mt: 1 }} />
-                  }}
-                />
               </Stack>
             </Paper>
 
@@ -677,22 +659,6 @@ export default function TeamSectionManager({
                         <Typography variant="subtitle2" color="primary" gutterBottom>
                           {member.designation}
                         </Typography>
-                        {member.bio && (
-                          <Typography 
-                            variant="body2" 
-                            color="text.secondary" 
-                            sx={{ 
-                              mb: 2,
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden'
-                            }}
-                          >
-                            {member.bio}
-                          </Typography>
-                        )}
-                        
                         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
                           <Tooltip title="Edit Member">
                             <IconButton

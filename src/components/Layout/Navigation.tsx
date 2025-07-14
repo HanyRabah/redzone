@@ -1,5 +1,5 @@
 // components/Layout/Navigation.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -126,11 +126,19 @@ const overlayVariants = {
 
 const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-
+  const [blogPostsCount, setBlogPostsCount] = useState<number>(0);  
   const handleClose = () => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const getBlogPostsCount = async () => {
+      const count = await fetch('/api/admin/blog/count').then(res => res.json());
+      setBlogPostsCount(count);
+    }
+    getBlogPostsCount();
+  }, []);
+ 
   return (
     <AnimatePresence>
       {isOpen && (
@@ -172,66 +180,51 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
             </motion.div>
           </div>
 
-          {/* Close Button */}
-          {/* <div id="menu-close" className="absolute top-10 right-10 z-30">
-            <IconButton
-              onClick={() => setIsOpen(false)}
-              className="w-10 h-6 p-0 cursor-none hover:bg-transparent"
-              disableRipple
-            >
-              <motion.div
-                variants={closeButtonVariants}
-                className="relative w-10 h-6"
-              >
-                <div className="absolute w-10 h-0.5 bg-white top-1/2 left-0 transform -translate-y-1/2 rotate-45" />
-                <div className="absolute w-10 h-0.5 bg-white top-1/2 left-0 transform -translate-y-1/2 -rotate-45" />
-              </motion.div>
-            </IconButton>
-          </div> */}
-
-          {/* Navigation Menu Overlay */}
           <motion.div
             variants={overlayVariants}
             className="absolute right-0 h-full"
             id="nav-menu"
           >
             <div className="flex flex-col items-center justify-center h-full w-full left-auto  right-0 bg-black">
-              {navigationItems.map((item, index) => (
-                <div
-                  key={item.title}
-                  className="my-2 overflow-hidden relative pointer-large"
-                  onMouseEnter={() => setHoveredItem(index)}
-                >
-                  <motion.div
-                    custom={index}
-                    variants={linkVariants}
-                    className="block"
+              {navigationItems.map((item, index) => {
+                if(blogPostsCount === 0 && item.title === 'Blog') return null;
+                return (
+                  <div
+                    key={item.title}
+                    className="my-2 overflow-hidden relative pointer-large"
+                    onMouseEnter={() => setHoveredItem(index)}
                   >
-                    <Link href={item.href} onClick={handleClose} className="block cursor-none">
-                      <Typography
-                        variant="h2"
-                        className="text-white text-5xl xl:text-6xl font-medium uppercase tracking-wide leading-none relative overflow-hidden whitespace-nowrap"
-                        style={{
-                          fontFamily: 'Oswald, sans-serif',
-                          fontWeight: 500
-                        }}
-                      >
-                        <span className="relative inline-block">
-                          {item.title}
-                          <motion.div
-                            variants={textFillVariants}
-                            animate={hoveredItem === index ? "hover" : "rest"}
-                            className="absolute inset-0 bg-red-600 text-red-600 overflow-hidden whitespace-nowrap"
-                            style={{ backgroundColor: 'black' }}
-                          >
+                    <motion.div
+                      custom={index}
+                      variants={linkVariants}
+                      className="block"
+                    >
+                      <Link href={item.href} onClick={handleClose} className="block cursor-none">
+                        <Typography
+                          variant="h2"
+                          className="text-white text-5xl xl:text-6xl font-medium uppercase tracking-wide leading-none relative overflow-hidden whitespace-nowrap"
+                          style={{
+                            fontFamily: 'Oswald, sans-serif',
+                            fontWeight: 500
+                          }}
+                        >
+                          <span className="relative inline-block">
                             {item.title}
-                          </motion.div>
-                        </span>
-                      </Typography>
-                    </Link>
-                  </motion.div>
-                </div>
-              ))}
+                            <motion.div
+                              variants={textFillVariants}
+                              animate={hoveredItem === index ? "hover" : "rest"}
+                              className="absolute inset-0 bg-red-600 text-red-600 overflow-hidden whitespace-nowrap"
+                              style={{ backgroundColor: 'black' }}
+                            >
+                              {item.title}
+                            </motion.div>
+                          </span>
+                        </Typography>
+                      </Link>
+                    </motion.div>
+                  </div>
+                )
+              })}
             </div>
           </motion.div>
         </motion.div>

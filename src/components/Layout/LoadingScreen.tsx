@@ -32,11 +32,11 @@ export default function LoadingScreen() {
           transition-all duration-700 ease-out 
           ${isAnimatingOut ? 'opacity-0' : ''}
         `}>
-        <div className="relative w-24 h-24">
+        <div className="relative w-48 h-48">
           <div className="absolute inset-0 border-2 border-gray-700 border-l-white rounded-full animate-spin" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-24 h-24 rounded-full flex items-center justify-center">
-              <Image src="/assets/images/logo/logo-loader.png" alt="logo" width={100} height={100} />
+            <div className="w-48 h-48 rounded-full flex items-center justify-center">
+              <Image src="/assets/images/logo/logo-loader.png" alt="logo" width={200} height={200} />
             </div>
           </div>
         </div>

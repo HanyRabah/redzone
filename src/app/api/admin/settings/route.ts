@@ -47,14 +47,20 @@ export async function POST(request: NextRequest) {
       'favicon',
       'contactEmail',
       'contactPhone',
+      'contactAddress',
       'socialFacebook',
       'socialTwitter',
       'socialInstagram',
       'socialLinkedin',
+      'socialYoutube',
+      'socialPinterest',
+      'socialTiktok',
+      'socialBehance',
+      'socialVimeo',
+      'socialSpotify',
       'googleAnalytics',
-      'maintenanceMode',
       'seoDefaultTitle',
-      'seoDefaultDescription'
+      'seoDefaultDescription',
     ]
 
     for (const key of settingsToUpdate) {

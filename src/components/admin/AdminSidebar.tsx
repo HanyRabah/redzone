@@ -23,10 +23,8 @@ const navigation = [
   { name: 'Blog Page', href: '/admin/dashboard/blog', icon: FileText },
   { name: 'Contact Page', href: '/admin/dashboard/contact', icon: Mail },
   { name: 'Contact Form', href: '/admin/dashboard/contactForm', icon: Mail },
-  // { name: 'Team Section', href: '/admin/dashboard/team', icon: Users },
   { name: 'Clients Section', href: '/admin/dashboard/clients', icon: Users },
   { name: 'Testimonials Section', href: '/admin/dashboard/testimonials', icon: MessageSquare },
-  { name: 'Media', href: '/admin/dashboard/media', icon: Users},
   { name: 'Settings', href: '/admin/dashboard/settings', icon: Settings },
 ]
 

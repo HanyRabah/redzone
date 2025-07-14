@@ -39,7 +39,7 @@ interface SettingsTabsProps {
     siteSettings: SiteSettings[]
     users: User[];
 }
-export default function SettingsTabs({ siteSettings, users }: SettingsTabsProps) {
+export default function SettingsTabs({ siteSettings, users  }: SettingsTabsProps) {
   const [value, setValue] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {

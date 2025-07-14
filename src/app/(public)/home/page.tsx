@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma';
  
 
 const getPageData = async () => {
-  const [heroSlider, aboutUsSection, clients, testimonials, featuredProjects, blogPosts] = await Promise.all([
+  const [heroSlider, aboutUsSection, clients, testimonials, featuredProjects, categories, blogPosts] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'home' }, include: {slides: true} }),
     prisma.aboutUsSection.findFirst(),
     prisma.client.findMany({ orderBy: { sortOrder: 'asc' } }),
@@ -17,6 +17,7 @@ const getPageData = async () => {
       where: { isFeatured: true },
       orderBy: { sortOrder: 'asc' }
     }),
+    prisma.projectCategory.findMany(),
     prisma.blogPost.findMany({
       include: {
         categories: true,
@@ -32,17 +33,18 @@ const getPageData = async () => {
     clients,
     testimonials,
     featuredProjects,
+    categories,
     blogPosts
   }
 }
 
 export default async function Home() {
-  const {heroSlider, aboutUsSection, clients, testimonials, featuredProjects, blogPosts} = await getPageData();
+  const {heroSlider, aboutUsSection, clients, testimonials, featuredProjects, categories, blogPosts} = await getPageData();
   return (
     <main className="relative mb-150">
       <HeroSlider pageSlides={heroSlider} />
       <About pageData={aboutUsSection} />
-      <Portfolio projects={featuredProjects} />
+      <Portfolio projects={featuredProjects} categories={categories} />
       <Clients clients={clients} />
       <Testimonials pageData={testimonials} />
       <Blog blogPosts={blogPosts} />

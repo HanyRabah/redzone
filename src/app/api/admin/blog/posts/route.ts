@@ -152,3 +152,22 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const posts = await prisma.blogPost.findMany({
+      select: {
+        id: true,
+        slug: true,
+      },
+    });
+    return NextResponse.json(posts, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch blog posts" },
+      { status: 500 }
+    );
+  }
+}
+        

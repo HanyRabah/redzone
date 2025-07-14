@@ -29,19 +29,45 @@ const menuItems: { name: string; href: string }[] = [{
 
 const Footer: React.FC = () => {
   const [selectedMenuItem, setSelectedMenuItem] = React.useState<string | null>(null);
+  const [socialLinks, setSocialLinks] = React.useState<{name: string; href: string}[]>([]);
+  const [contacts, setContacts ] = React.useState<{name: string; href: string}[]>([]);
+  const [blogPostsCount, setBlogPostsCount] = React.useState<number>(0);
 
-  const socialLinks = [
-    {name: 'Instagram', href: 'https://www.instagram.com'}, 
-    {name: 'Facebook', href: 'https://www.facebook.com'}, 
-    {name: 'Spotify', href: 'https://www.spotify.com'}, 
-    {name: 'Vimeo', href: 'https://www.vimeo.com'}, 
-    {name: 'Behance', href: 'https://www.behance.net'}, 
-  ];
 
   useEffect(() => {
     const currentPath = window.location.pathname;
     const selectedItem = menuItems.find(item => item.href === currentPath);
     setSelectedMenuItem(selectedItem ? selectedItem.name : null);
+  }, []);
+
+  const getSettingsData = async () => {
+    const [settings, blogsCounts] = await Promise.all([
+      fetch('/api/admin/settings').then(res => res.json()),
+      fetch('/api/admin/blog/count').then(res => res.json()),
+    ]);
+
+    setBlogPostsCount(blogsCounts);
+    setSocialLinks([
+      settings.socialInstagram && {name: 'Instagram', href: settings.socialInstagram}, 
+      settings.socialFacebook && {name: 'Facebook', href: settings.socialFacebook}, 
+      settings.socialSpotify && {name: 'Spotify', href: settings.socialSpotify}, 
+      settings.socialVimeo && {name: 'Vimeo', href: settings.socialVimeo}, 
+      settings.socialBehance && {name: 'Behance', href: settings.socialBehance}, 
+      settings.socialLinkedin && {name: 'LinkedIn', href: settings.socialLinkedin}, 
+      settings.socialYoutube && {name: 'Youtube', href: settings.socialYoutube}, 
+      settings.socialPinterest && {name: 'Pinterest', href: settings.socialPinterest}, 
+      settings.socialTiktok && {name: 'Tiktok', href: settings.socialTiktok}, 
+      settings.socialTwitter && {name: 'Twitter', href: settings.socialTwitter}, 
+    ].filter(Boolean));
+    setContacts([
+      settings.contactEmail && {name: 'Email', href: settings.contactEmail}, 
+      settings.contactPhone && {name: 'Phone', href: settings.contactPhone}, 
+      settings.contactAddress && {name: 'Address', href: settings.contactAddress}, 
+    ].filter(Boolean));
+  }
+
+  useEffect(() => {
+    getSettingsData();
   }, []);
 
   return (
@@ -60,46 +86,53 @@ const Footer: React.FC = () => {
 
           <div className="col-span-1 md:col-span-2 text-center md:text-left">
             <div className="space-y-2">
-              {menuItems.map((item) => (
-                <div key={item.name}>
-                  <Link 
-                    href={item.href}
-                    className={"text-sm font-bold uppercase tracking-wide hover:text-red-500 transition-colors duration-300 block " + (selectedMenuItem === item.name ? "text-red-500" : "text-white")}
-                  >
-                    {item.name}
-                  </Link>
-                </div>
-              ))}
+              {menuItems.map((item) => {
+                if(blogPostsCount ===0 && item.name === 'Blog') return null;
+                return (
+                  <div key={item.name}>
+                    <Link 
+                      href={item.href}
+                      className={"text-sm font-bold uppercase tracking-wide hover:text-red-500 transition-colors duration-300 block " + (selectedMenuItem === item.name ? "text-red-500" : "text-white")}
+                    >
+                      {item.name}
+                    </Link>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
           <div className="col-span-1 md:col-span-4 mx-auto text-left">
+          {contacts.length > 0 && (
             <div className="space-y-4 text-white">
               <div className="flex md:items-center justify-start">
                 <IoMdMail className="w-4 h-4 mr-3" />
                 <p className="text-xs uppercase tracking-wide">
-                  amr.elwadidy@gmail.com
+                  {contacts.find((contact) => contact.name === 'Email')?.href}
                 </p>
               </div>
               
               <div className="flex md:items-center justify-start">
                 <FaMobileAlt className="w-4 h-4 mr-3" />
                 <p className="text-xs uppercase tracking-wide">
-                  +201156659999
+                  {contacts.find((contact) => contact.name === 'Phone')?.href}
                 </p>
               </div>
               
               <div className="flex md:items-center justify-start">
                 <HiMapPin className="w-4 h-4 mr-3" />
                 <p className="text-xs uppercase tracking-wide leading-4">
-                  Giza, Egypt
+                  <a href={contacts.find((contact) => contact.name === 'Address')?.href} target="_blank" className="text-xs uppercase tracking-wide leading-4">
+                    GIZA, EGYPT
+                  </a>
                 </p>
               </div>
             </div>
+          )}
           </div>
 
           <div className="col-span-1 md:col-span-2 mx-auto md:ml-auto"> 
-            <div className="space-y-0">
+            <div className="space-y-0 pointer-small">
               {socialLinks.map((social, index) => <div key={index}><FlipLink text={social.name} href={social.href} className='align-left' /></div>)}
             </div>
           </div>

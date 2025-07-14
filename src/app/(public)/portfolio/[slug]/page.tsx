@@ -6,24 +6,27 @@ type PageProps = {
 };
 
 const getPageData = async () => {
-  const PortfolioData = await prisma.project.findMany({
- 
-    include: {
-      category: true,
-    },
-  });
+  const [categories, projects] = await Promise.all([
+    prisma.projectCategory.findMany(),
+    prisma.project.findMany({ 
+      orderBy: { sortOrder: 'asc' }
+    }),
+  ])
 
-  return PortfolioData;
+  return {
+    categories,
+    projects,
+  };
 };
 
 const PortfolioPage= async ({ params }: PageProps) => {
   const { slug } = await params;
-  const PortfolioData = await getPageData();
-  const currentProject = PortfolioData.find((project) => project.slug === slug);
+  const {categories, projects} = await getPageData();
+  const currentProject = projects.find((project) => project.slug === slug);
 
   return (
     <main className="relative mb-100">
-    <PortfolioDetailPage project={currentProject} allprojects={PortfolioData} />
+    <PortfolioDetailPage project={currentProject} allprojects={projects} categories={categories} />
     </main>
   );
 };

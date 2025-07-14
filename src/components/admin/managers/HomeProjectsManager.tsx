@@ -345,7 +345,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
                       <Tooltip title="Edit Project">
                         <IconButton
                           component={Link}
-                          href="/admin/portfolio"
+                          href="/admin/dashboard/portfolio"
                           size="small"
                           sx={{ color: 'primary.main' }}
                         >
@@ -397,7 +397,7 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
         color="primary"
         aria-label="manage portfolio"
         component={Link}
-        href="/admin/portfolio"
+        href="/admin/dashboard/portfolio"
         sx={{
           position: 'fixed',
           bottom: 24,

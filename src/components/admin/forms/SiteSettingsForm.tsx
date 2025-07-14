@@ -22,10 +22,10 @@ export default function SiteSettingsForm({ settingsData }: SiteSettingsFormProps
     siteName: settingsData.find((setting) => setting.key === 'siteName')?.value || '',
     siteDescription: settingsData.find((setting) => setting.key === 'siteDescription')?.value || '',
     siteUrl: settingsData.find((setting) => setting.key === 'siteUrl')?.value || '',
-    // siteLogo: initialData.siteLogo || '',
-    // favicon: initialData.favicon || '',
     contactEmail: settingsData.find((setting) => setting.key === 'contactEmail')?.value || '',
     contactPhone: settingsData.find((setting) => setting.key === 'contactPhone')?.value || '',
+    contactAddress: settingsData.find((setting) => setting.key === 'contactAddress')?.value || '',
+
 
     socialFacebook: settingsData.find((setting) => setting.key === 'socialFacebook')?.value || '',
     socialTwitter: settingsData.find((setting) => setting.key === 'socialTwitter')?.value || '',
@@ -37,8 +37,8 @@ export default function SiteSettingsForm({ settingsData }: SiteSettingsFormProps
     socialBehance: settingsData.find((setting) => setting.key === 'socialBehance')?.value || '',
     socialVimeo: settingsData.find((setting) => setting.key === 'socialVimeo')?.value || '',
     socialSpotify: settingsData.find((setting) => setting.key === 'socialSpotify')?.value || '',
-    //googleAnalytics: initialData.googleAnalytics || '',
-    // maintenanceMode: initialData.maintenanceMode === 'true',
+
+
     seoDefaultTitle: settingsData.find((setting) => setting.key === 'seoDefaultTitle')?.value || '',
     seoDefaultDescription: settingsData.find((setting) => setting.key === 'seoDefaultDescription')?.value || ''
   })
@@ -144,6 +144,15 @@ export default function SiteSettingsForm({ settingsData }: SiteSettingsFormProps
               />
             </FormControl>
           </div>
+          <FormControl fullWidth>
+              <TextField
+                id="contactAddress"
+                label="Google Map Address"
+                value={formData.contactAddress}
+                onChange={(e) => setFormData(prev => ({ ...prev, contactAddress: e.target.value }))}
+                placeholder="123 Main St, City, Country"
+              />
+            </FormControl>
         </CardContent>
       </Card>
 

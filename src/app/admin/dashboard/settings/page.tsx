@@ -16,22 +16,11 @@ async function getSettingsData() {
     prisma.user.findMany(),
   ]);
 
-  // // Convert array to object for easier access
-  // const settingsObject = siteSettings.reduce(
-  //   (acc, setting) => {
-  //     acc[setting.key] = setting.value;
-  //     return acc;
-  //   },
-  //   {} as SiteSettings[]
-  // );
-
   return {
     siteSettings,
     users,
   };
 }
-
-
 
 export default async function SettingsPage() {
   const {siteSettings, users} = await getSettingsData();
@@ -47,28 +36,6 @@ export default async function SettingsPage() {
         </p>
       </div>
       <SettingsTabs siteSettings={siteSettings} users={users} />
-     
-        {/* <TabsContent value="profile">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Profile</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <UserProfileForm initialData={data.userProfile} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="security">
-          <Card>
-            <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SecuritySettingsForm />
-            </CardContent>
-          </Card>
-        </TabsContent> */}
     </div>
   );
 }

@@ -78,8 +78,8 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
     try {
       if (editingCategory) {
         // Update category (rename all projects with this category)
-        const response = await fetch('/api/admin/categories/rename', {
-          method: 'POST',
+        const response = await fetch(`/api/admin/categories/${editingCategory}`, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -95,7 +95,20 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
 
         toast.success('Category updated successfully')
       } else {
-        toast.success('Category will be created when you add a project to it')
+        const response = await fetch('/api/admin/categories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: newCategoryName.trim()
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to create category')
+        }
+        toast.success('Category created successfully')
       }
 
       router.refresh()
@@ -107,25 +120,34 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
   }
 
   const handleDeleteCategory = async (categoryName: string) => {
-    const projectsInCategory = projects.filter(p => categories.find(cat => cat.id === p.categoryId)?.name === categoryName)
+    // ADD a confirmation from the user
+    const confirmMessage = `Are you sure you want to delete the category "${categoryName}"?`
+    const action = confirm(confirmMessage)
+    if (!action) return
     
+    const projectsInCategory = projects.filter(p => categories.find(cat => cat.id === p.categoryId)?.name === categoryName)
+    let moveToUncategorized = false
     if (projectsInCategory.length > 0) {
       const confirmMessage = `This category has ${projectsInCategory.length} project(s). What would you like to do with them?`
       
       const action = confirm(`${confirmMessage}\n\nClick OK to move them to "Uncategorized" or Cancel to abort.`)
       
-      if (!action) return
+      if (!action) {
+        return
+      }
+      moveToUncategorized = true
     }
 
     try {
-      const response = await fetch('/api/admin/categories/delete', {
-        method: 'POST',
+      const categoryId = categories.find(cat => cat.name === categoryName)?.id
+      const response = await fetch(`/api/admin/categories/${categoryId}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          categoryName,
-          moveToUncategorized: true
+          id: categoryId,
+          moveToUncategorized
         }),
       })
 
@@ -141,8 +163,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
     }
   }
 
-  const maxCount = Math.max(...categories.map(c => c.postCount), 1)
-  const totalProjects = categories.reduce((sum, cat) => sum + cat.postCount, 0)
+  const totalProjects = projects.length
 
   const getCategoryColor = (index: number) => {
     const colors = ['#1976d2', '#2e7d32', '#ed6c02', '#9c27b0', '#d32f2f', '#0288d1', '#7b1fa2', '#5d4037']
@@ -222,7 +243,6 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
           <Grid container spacing={3}>
             {categories.map((category, index) => {
               const categoryColor = getCategoryColor(index)
-              const percentage = (category.postCount / maxCount) * 100
               
               return (
                 <Grid key={category.name} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -258,7 +278,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                               {category.name}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              {category.postCount} project{category.postCount !== 1 ? 's' : ''}
+                              {projects.filter(p => p.categoryId === category.id).length} project{projects.filter(p => p.categoryId === category.id).length !== 1 ? 's' : ''}
                             </Typography>
                           </Box>
                         </Box>
@@ -294,12 +314,12 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                             Usage
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            {Math.round(percentage)}%
+                            {Math.round((projects.filter(p => p.categoryId === category.id).length / projects.length) * 100)}%
                           </Typography>
                         </Box>
                         <LinearProgress
                           variant="determinate"
-                          value={Math.max(5, percentage)} // Minimum 5% for visibility
+                          value={Math.max(5, (projects.filter(p => p.categoryId === category.id).length / projects.length) * 100)} // Minimum 5% for visibility
                           sx={{
                             height: 6,
                             borderRadius: 3,
@@ -314,7 +334,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
 
                       <Box sx={{ mt: 2 }}>
                         <Chip
-                          label={`${category.postCount} projects`}
+                          label={`${projects.filter(p => p.categoryId === category.id).length} projects`}
                           size="small"
                           sx={{
                             bgcolor: alpha(categoryColor, 0.1),
@@ -341,7 +361,8 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
                 .sort((a, b) => b.postCount - a.postCount)
                 .map((category, index) => {
                   const categoryColor = getCategoryColor(index)
-                  const percentage = (category.postCount / totalProjects) * 100
+                  const totalProjects = projects.filter(p => p.categoryId === category.id).length || 0
+                  const percentage = Math.round(totalProjects / projects.length * 100)
                   
                   return (
                     <Box key={category.name}>
@@ -435,7 +456,7 @@ export default function PortfolioCategoriesManager({ categories, projects }: Por
               >
                 <Typography variant="body2">
                   <strong>Warning:</strong> Renaming this category will update all{' '}
-                  {categories.find(c => c.name === editingCategory)?.postCount || 0} project(s) that use it.
+                  {projects.filter(p => p.categoryId === categories.find(cat => cat.name === editingCategory)?.id).length || 0} project(s) that use it.
                 </Typography>
               </Alert>
             )}

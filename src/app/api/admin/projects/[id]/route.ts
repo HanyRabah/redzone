@@ -38,7 +38,7 @@ export async function PUT(
       description: data.description,
       content: data.content,
       image: data.image,
-      link: data.link,
+      link: data.link ? `https://www.youtube.com/embed/${data.link.trim()}` : null,
       slug: data.slug,
       client: data.client,        
       role: data.role,            

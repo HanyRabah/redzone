@@ -34,7 +34,6 @@ const bottomLineVariants = {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);

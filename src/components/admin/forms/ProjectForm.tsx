@@ -13,11 +13,11 @@ import {
   CardContent,
   CardHeader,
   FormControl,
-  InputLabel,
   MenuItem,
   Select,
   Switch,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import RichTextEditor from "@/components/RichTextEditor";
@@ -33,7 +33,6 @@ export default function ProjectForm({
   categories,
   onClose,
 }: ProjectFormProps) {
-  console.log("🚀 ~ project:", project)
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
  
@@ -177,14 +176,11 @@ export default function ProjectForm({
 
             <FormControl>
                 <FormControl fullWidth>
-                  <InputLabel id="category-select-label">
-                    Select Category
-                  </InputLabel>
+            
                   <Select
                     labelId="category-select-label"
                     id="category-select"
                     value={formData.categoryId || ""}
-                    label="Select Category"
                     onChange={(e) => handleCategorySelect(e)}
                     displayEmpty
                   >
@@ -224,7 +220,7 @@ export default function ProjectForm({
               <TextField
                 id="client"
                 value={formData.client}
-                label="Client"
+                label="Client Name"
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -236,7 +232,7 @@ export default function ProjectForm({
               />
             </FormControl>
 
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <TextField
                 id="role"
                 value={formData.role}
@@ -250,13 +246,13 @@ export default function ProjectForm({
                 placeholder="Role of the client..."
                 required
               />
-            </FormControl>
+            </FormControl> */}
 
             <FormControl fullWidth>
               <TextField
                 id="year"
                 value={formData.year}
-                label="Year"
+                label="Project Year"
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -287,16 +283,18 @@ export default function ProjectForm({
         <CardHeader sx={{ p: 2 }} title="Project Video" />
         <CardContent>
           <FormControl fullWidth>
-            <Label>External Link (optional)</Label>
-            <TextField
+            <Label>Youtube id (optional)</Label>
+            <Tooltip title="Add youtube id Example: dQw4w9WgXcQ">
+              <TextField
               id="link"
-              value={formData.link}
+              value={formData.link?.split('/').pop()}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, link: e.target.value }))
               }
-              placeholder="https://youtube.com/videoid"
+              placeholder="Add youtube id Example: dQw4w9WgXcQ"
               type="url"
             />
+            </Tooltip>
           </FormControl>
         </CardContent>
       </Card>

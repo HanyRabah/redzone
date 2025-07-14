@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
         description: data.description.trim(),
         content: data.content.trim(),
         image: data.image.trim(),
-        link: data.link?.trim() || null,
+        link: data.link ? `https://www.youtube.com/embed/${data.link.trim()}` : null,
         client: data.client.trim(),
         role: data.role.trim(),
         year: data.year ? parseInt(data.year) : null,

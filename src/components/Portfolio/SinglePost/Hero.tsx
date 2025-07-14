@@ -1,10 +1,14 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
-import { Project } from "@prisma/client";
+import { Project, ProjectCategory } from "@prisma/client";
 
-
-
-const BlogHero = ({ project }: { project: Project| null }) => {
+const BlogHero = ({
+  project,
+  categories,
+}: {
+  project: Project | null;
+  categories: ProjectCategory[] | null;
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -37,18 +41,16 @@ const BlogHero = ({ project }: { project: Project| null }) => {
               </h1>
 
               <div className="flex flex-col gap-4 text-white font-['Oswald'] text-sm uppercase tracking-wider">
-                <div className="flex flex-wrap gap-4">
-                  {/* TODO: add category */}
-                  {/* @ts-ignore fix type later */}
-                  In: {project?.category?.name}
-                </div>
-                <div className="flex flex-wrap gap-4">
-                  <span
-                    className="text-gray-300"
-                    style={{ transitionDelay: "800ms" }}
-                  >
-                    {project?.createdAt?.toDateString()}
-                  </span>
+                <div className="flex flex-wrap gap-8">
+                  <div className="font-bold">CLIENT: {project?.client}</div>
+                  <div className="font-bold">YEAR: {project?.year}</div>
+                  <div className="font-bold">CATEGORY:
+                  {
+                    categories?.find(
+                      (category) => category.id === project?.categoryId
+                    )?.name
+                  }
+                  </div>
                 </div>
               </div>
             </div>

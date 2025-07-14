@@ -3,17 +3,19 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ChevronArrowWithTail } from "../Layout/Arrow/arrow";
 import Link from "next/link";
-import { Project } from "@prisma/client";
+import { Project, ProjectCategory } from "@prisma/client";
 
 interface PortfolioArticleProps {
   project: Project;
   index: number;
   isInView?: boolean;
+  categories?: ProjectCategory[];
 }
 
 // Individual Article Component
-const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
+const PortfolioArticle: React.FC<PortfolioArticleProps> = ({
   project,
+  categories,
   index,
 }) => {
    const articleRef = useRef<HTMLDivElement>(null);
@@ -115,7 +117,7 @@ const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
               <span
                 className={`uppercase tracking-widest text-sm font-bold text-red-500`}
               >
-                {project.categoryId}
+                {categories?.find((category) => category.id === project.categoryId)?.name}
               </span>
             </motion.div>
 
@@ -194,9 +196,10 @@ const PortfolioArticle: React.FC<Omit<PortfolioArticleProps, 'isInView'>> = ({
 // Main Portfolio Component
 interface PortfolioProps {
   projects?: Project[];
+  categories?: ProjectCategory[];
 }
 
-const Portfolio: React.FC<PortfolioProps> = ({ projects = [] }) => {
+const Portfolio: React.FC<PortfolioProps> = ({ projects = [], categories = [] }) => {
   return (
     <div className="bg-gray-50 py-30">
       {/* Section Header */}
@@ -211,7 +214,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ projects = [] }) => {
             <div className="overflow-hidden inline-block">
               <div className="relative">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-black uppercase tracking-tight">
-                  Recent Works
+                  Portfolio
                 </h1>
               </div>
             </div>
@@ -236,6 +239,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ projects = [] }) => {
             key={project.id}
             project={project}
             index={index}
+            categories={categories}
           />
         ))}
       </div>

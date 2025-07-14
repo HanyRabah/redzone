@@ -1,18 +1,17 @@
 "use client"
 import Hero from "./Hero";
 import ContentRenderer from "./ContentRenderer";
-import { Project } from "@prisma/client";
+import { Project, ProjectCategory } from "@prisma/client";
 import NextProjectButton from "../NextProjectButton";
 
 
-const PortfolioDetailPage = ({ allprojects, project }: { allprojects?: Project[] | null, project?: Project | null }) => {
-    console.log("🚀 ~ PortfolioDetailPage ~ project:", project)
+const PortfolioDetailPage = ({ allprojects, project, categories }: { allprojects?: Project[] | null, project?: Project | null, categories?: ProjectCategory[] | null }) => {
     if (!project) {
       return null;
     }
     return (
       <div className="min-h-screen">
-        <Hero project={project} />
+        <Hero project={project} categories={categories || []} />
   
         {/* Main Content */}
         <div id="content" className="py-20">
