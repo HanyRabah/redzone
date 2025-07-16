@@ -9,8 +9,10 @@ import Testimonials from "@/components/Home/Testimonials";
 import Blog from "@/components/Home/Blog";
 import theme from "@/style/theme";
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from 'next/cache';
 
 const getPageData = async () => {
+  noStore();
   const [
     heroSlider,
     aboutUsSection,

@@ -5,8 +5,10 @@ import WhoWeAre from '@/components/About/WhoWeAre';
 import HeroSlider from '@/components/Home/HeroSlider';
 import Testimonials from '@/components/Home/Testimonials';
 import { prisma } from '@/lib/prisma';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const getPageData = async () => {
+  noStore();
   const [heroSlider, whoWeAreSection, teamSection, teamMembers, weAreCreativeSection, testimonials] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'about' }, include: {slides: true} }),
     prisma.whoWeAreSection.findFirst(),

@@ -2,8 +2,10 @@ import React from 'react';
 import HeroSlider from '@/components/Home/HeroSlider';
 import PortfolioComponent from '@/components/Home/Portfolio';
 import { prisma } from '@/lib/prisma';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const getPageData = async () => {
+  noStore();
   const [heroSlider, featuredProjects, categories] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'portfolio' }, include: {slides: true} }),
     prisma.project.findMany({ 

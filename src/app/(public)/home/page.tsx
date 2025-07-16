@@ -5,9 +5,11 @@ import Clients from '@/components/Home/Clients';
 import Testimonials from '@/components/Home/Testimonials';
 import Blog from '@/components/Home/Blog';
 import { prisma } from '@/lib/prisma';
+import { unstable_noStore as noStore } from 'next/cache';
  
 
 const getPageData = async () => {
+  noStore();
   const [heroSlider, aboutUsSection, clients, testimonials, featuredProjects, categories, blogPosts] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'home' }, include: {slides: true} }),
     prisma.aboutUsSection.findFirst(),

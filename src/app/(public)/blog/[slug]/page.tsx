@@ -1,11 +1,13 @@
 import BlogDetailPage from "@/components/Blog/SinglePost";
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from 'next/cache';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
 const getPageData = async (slug: string) => {
+  noStore();
   const blogPost = await prisma.blogPost.findUnique({
     where: {
       slug: slug,

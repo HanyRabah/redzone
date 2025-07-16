@@ -1,11 +1,13 @@
 import PortfolioDetailPage from "@/components/Portfolio/SinglePost";
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from 'next/cache';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
 const getPageData = async () => {
+  noStore();
   const [categories, projects] = await Promise.all([
     prisma.projectCategory.findMany(),
     prisma.project.findMany({ 

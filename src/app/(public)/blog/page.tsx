@@ -4,8 +4,10 @@ import HeroSlider from '@/components/Home/HeroSlider';
 //import Newsletter from '@/components/Layout/Newsletter/Newsletter';
 import { prisma } from '@/lib/prisma';
 import BlogPage from '@/components/Blog';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const getBlogData = async () => {
+  noStore();
   const [heroSlider, categories, posts, tags] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'blog' }, include: {slides: true} }),
     prisma.blogCategory.findMany(),

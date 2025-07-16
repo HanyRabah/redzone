@@ -5,6 +5,7 @@ import ContactInfo from '@/components/Contact/ContactInfo';
 import ContactForm from '@/components/Contact/ContactForm';
 import { prisma } from '@/lib/prisma';
 import type { ContactItem } from '@/components/Contact/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
 // Type guard to check if an object is a valid ContactItem
 const isContactItem = (item: unknown): item is ContactItem => {
@@ -35,6 +36,7 @@ const parseContacts = (contacts: unknown): ContactItem[] => {
 };
 
 const getPageData = async () => {
+  noStore();
   const [heroSlider, contactDetails] = await Promise.all([
     prisma.heroSlider.findUnique({ 
       where: { page: 'contact' }, 
