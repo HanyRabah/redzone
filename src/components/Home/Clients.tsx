@@ -118,27 +118,30 @@ const Clients: React.FC<ClientsProps> = ({ clients }) => {
             animate={isInView ? "visible" : "hidden"}
             className="grid grid-cols-2 lg:grid-cols-4 mb-20"
           >
-            {clients.map((client, index) => (
-              <motion.div
-                key={`method2-${client.id}`}
-                variants={clientVariants}
-                custom={index}
-                className={`group relative h-48 p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(
-                  index,
-                  clients.length,
-                  breakpoint === "desktop" ? 4 : 2
-                )}`} 
-              >
-                <Link href={client.website || "#"} target={client.website ? "_blank" : "_self"} className="relative w-full h-full link">
-                    <Image
-                      src={client.logo}
-                      alt={client.name}
-                      fill
-                      className="w-full h-full object-contain group-hover:opacity-100 transition-all duration-100 group-hover:[filter:invert(14%)_sepia(100%)_saturate(7463%)_hue-rotate(1deg)_brightness(103%)_contrast(103%)]"
-                    />
-                </Link>
-              </motion.div>
-            ))}
+            {clients.map((client, index) => {
+              if(!client.isActive) return null;
+              return (
+                <motion.div
+                  key={`method2-${client.id}`}
+                  variants={clientVariants}
+                  custom={index}
+                  className={`group relative h-48 p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(
+                    index,
+                    clients.length,
+                    breakpoint === "desktop" ? 4 : 2
+                  )}`} 
+                >
+                  <Link href={client.website || "#"} target={client.website ? "_blank" : "_self"} className="relative w-full h-full link">
+                      <Image
+                        src={client.logo}
+                        alt={client.name}
+                        fill
+                        className="w-full h-full object-contain group-hover:opacity-100 transition-all duration-100 group-hover:[filter:invert(14%)_sepia(100%)_saturate(7463%)_hue-rotate(1deg)_brightness(103%)_contrast(103%)]"
+                      />
+                  </Link>
+                </motion.div>
+              )
+            })}
             <motion.div
               custom={clients.length}
               variants={clientVariants}

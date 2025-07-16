@@ -51,6 +51,8 @@ const Blog = ({ blogPosts }: BlogProps) => {
     visible: { x: "100%" },
   };
 
+  if(!blogPosts || blogPosts.length === 0) return null;
+
   return (
     <Box className="bg-[#f5f5f5] py-20 mb-20" ref={ref}>
       <div className="container mx-auto">
