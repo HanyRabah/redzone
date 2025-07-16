@@ -40,6 +40,12 @@ export default function TestimonialsManager({ testimonials }: TestimonialsManage
         method: 'DELETE',
       })
 
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        body: JSON.stringify({ path: '/' }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
       if (!response.ok) {
         throw new Error('Failed to delete testimonial')
       }

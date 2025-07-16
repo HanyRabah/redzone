@@ -282,6 +282,12 @@ export default function HeroSliderForm({
         body: JSON.stringify(apiData),
       });
 
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        body: JSON.stringify({ path: '/' }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to save hero slider");

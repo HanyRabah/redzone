@@ -137,6 +137,12 @@ export default function ProjectForm({
           slug: formData.slug || generateSlug(formData.title),
         }),
       });
+      
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        body: JSON.stringify({ path: '/portfolio' }),
+        headers: { 'Content-Type': 'application/json' }
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

@@ -57,6 +57,12 @@ export default function HomeProjectsManager({ projects }: HomeProjectsManagerPro
         body: JSON.stringify({ isFeatured: !isFeatured }),
       })
 
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        body: JSON.stringify({ path: '/portfolio' }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
       if (!response.ok) {
         throw new Error('Failed to update project')
       }

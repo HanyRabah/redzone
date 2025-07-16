@@ -258,6 +258,12 @@ export default function AboutUsSectionForm({ initialData }: AboutUsSectionFormPr
         }),
       })
 
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        body: JSON.stringify({ path: '/about' }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
       if (!response.ok) {
         throw new Error('Failed to save about us section')
       }
