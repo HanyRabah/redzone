@@ -61,7 +61,7 @@ export default function SiteSettingsForm({ settingsData }: SiteSettingsFormProps
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/' }),
+        body: JSON.stringify({ path: '/(public)/home' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

@@ -146,7 +146,7 @@ export default function BlogPostsManager({
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/blog' }),
+        body: JSON.stringify({ path: '/(public)/blog' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

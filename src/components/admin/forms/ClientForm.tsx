@@ -53,7 +53,7 @@ export default function ClientForm({ client, onClose }: ClientFormProps) {
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/' }),
+        body: JSON.stringify({ path: '/(public)/home' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

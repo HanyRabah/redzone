@@ -317,7 +317,7 @@ export default function BlogPostForm({
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/blog' }),
+        body: JSON.stringify({ path: '/(public)/blog' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

@@ -4,7 +4,7 @@ export async function POST(request) {
   const { path } = await request.json();
   
   try {
-    revalidatePath(path);
+    revalidatePath(path, 'page');
     return Response.json({ revalidated: true });
   } catch (err) {
     console.error(err);

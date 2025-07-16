@@ -163,7 +163,7 @@ function TeamMemberForm({
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/' }),
+        body: JSON.stringify({ path: '/(public)/about' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

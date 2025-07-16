@@ -140,7 +140,7 @@ export default function ProjectForm({
       
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/portfolio' }),
+        body: JSON.stringify({ path: '/(public)/portfolio' }),
         headers: { 'Content-Type': 'application/json' }
       });
 

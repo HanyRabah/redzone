@@ -251,7 +251,7 @@ export default function ClientsManager({ clients }: ClientsManagerProps) {
 
       await fetch('/api/revalidate', {
         method: 'POST',
-        body: JSON.stringify({ path: '/' }),
+        body: JSON.stringify({ path: '/(public)/home' }),
         headers: { 'Content-Type': 'application/json' }
       });
 
