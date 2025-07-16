@@ -231,12 +231,6 @@ export default function ContactDetailsForm({ initialData }: ContactDetailsFormPr
         }),
       })
 
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/contact' }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
       if (!response.ok) {
         throw new Error('Failed to save contact details')
       }

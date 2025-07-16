@@ -144,12 +144,6 @@ export default function BlogPostsManager({
         }
       );
 
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/blog' }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
       if (!response.ok) {
         throw new Error(`Failed to ${action} blog post`);
       }

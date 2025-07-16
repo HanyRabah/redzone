@@ -63,13 +63,7 @@ function TagForm({ onClose }: { onClose: () => void }) {
         },
         body: JSON.stringify({ name: tagName.trim().toLowerCase(), slug: tagName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') }),
       })
-
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/blog' }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
+      
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to create tag')

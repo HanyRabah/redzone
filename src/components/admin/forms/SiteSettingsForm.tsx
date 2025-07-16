@@ -57,12 +57,6 @@ export default function SiteSettingsForm({ settingsData }: SiteSettingsFormProps
           ...formData,
           // maintenanceMode: formData.maintenanceMode.toString()
         }),
-      })
-
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/home' }),
-        headers: { 'Content-Type': 'application/json' }
       });
 
       if (!response.ok) {

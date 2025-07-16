@@ -100,12 +100,6 @@ function CategoryForm({
         }),
       })
 
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/blog' }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to save category')

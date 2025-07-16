@@ -138,12 +138,6 @@ export default function ProjectForm({
         }),
       });
       
-      await fetch('/api/revalidate', {
-        method: 'POST',
-        body: JSON.stringify({ path: '/(public)/portfolio' }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to save project");
