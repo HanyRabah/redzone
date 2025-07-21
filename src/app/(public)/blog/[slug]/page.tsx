@@ -1,4 +1,4 @@
-import BlogDetailPage from "@/components/Blog/SinglePost";
+import BlogDetailPage from "@/components/Client/Blog/SinglePost";
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from 'next/cache';
 

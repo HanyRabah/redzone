@@ -1,10 +1,10 @@
 
 import React from 'react';
-import HeroSlider from '@/components/Home/HeroSlider';
-import ContactInfo from '@/components/Contact/ContactInfo';
-import ContactForm from '@/components/Contact/ContactForm';
+import HeroSlider from '@/components/Client/Home/HeroSlider';
+import ContactInfo from '@/components/Client/Contact/ContactInfo';
+import ContactForm from '@/components/Client/Contact/ContactForm';
 import { prisma } from '@/lib/prisma';
-import type { ContactItem } from '@/components/Contact/types';
+import type { ContactItem } from '@/components/Client/Contact/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
 // Type guard to check if an object is a valid ContactItem

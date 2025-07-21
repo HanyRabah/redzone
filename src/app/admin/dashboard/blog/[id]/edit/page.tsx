@@ -5,14 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-//import BlogPostForm from '@/components/admin/forms/BlogPostForm'
 import { notFound } from 'next/navigation'
-
 
 type PageProps = {
   params: Promise<{ id: string }>;
 };
-
 
 async function getBlogPostData(id: string) {
   const [post, categories, posts, tags, authors] = await Promise.all([

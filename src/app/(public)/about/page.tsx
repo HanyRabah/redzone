@@ -1,9 +1,9 @@
 import React from 'react';
-import Team from '@/components/About/Team';
-import WeAreCreative from '@/components/About/WeAreCreative';
-import WhoWeAre from '@/components/About/WhoWeAre';
-import HeroSlider from '@/components/Home/HeroSlider';
-import Testimonials from '@/components/Home/Testimonials';
+import Team from '@/components/Client/About/Team';
+import WeAreCreative from '@/components/Client/About/WeAreCreative';
+import WhoWeAre from '@/components/Client/About/WhoWeAre';
+import HeroSlider from '@/components/Client/Home/HeroSlider';
+import Testimonials from '@/components/Client/Home/Testimonials';
 import { prisma } from '@/lib/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
 

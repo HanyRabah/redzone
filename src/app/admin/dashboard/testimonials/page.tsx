@@ -1,8 +1,8 @@
-import TestimonialsManager from "@/components/admin/managers/TestimonialsManager"
+import TestimonialsPage from "@/components/Dashboard/Testimonials"
 import { prisma } from "@/lib/prisma"
 import { Testimonial } from "@prisma/client"
 
-async function getDashboardStats() {
+async function getTestimonialsData() {
   const [
     totalTestimonials,
     testimonials,
@@ -18,9 +18,7 @@ async function getDashboardStats() {
 }
  
 
-const TestimonialsPage = async () => {
-    const { testimonials } = await getDashboardStats()
-    return <TestimonialsManager testimonials={testimonials as Testimonial[]} />
+export default async function Page() {
+    const { testimonials } = await getTestimonialsData()
+    return <TestimonialsPage testimonials={testimonials as Testimonial[]} />
 }
-
-export default TestimonialsPage

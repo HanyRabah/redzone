@@ -14,7 +14,7 @@ import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
 import Youtube from '@tiptap/extension-youtube';
 import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaHighlighter, FaImage, FaItalic, FaLink, FaListOl, FaListUl, FaQuoteLeft, FaQuoteRight, FaRedo, FaTable, FaUnderline, FaUndo, FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
-import ImageUpload from '../admin/ImageUpload';
+import ImageUpload from '../Dashboard/_Components/ImageUpload';
 import { Dialog } from '@mui/material';
 
 declare module '@tiptap/core' {

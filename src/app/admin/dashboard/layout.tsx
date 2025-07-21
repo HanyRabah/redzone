@@ -1,7 +1,7 @@
 // app/admin/layout.tsx
 import { Toaster } from "@/components/ui/sonner";
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
+import AdminSidebar from "@/components/Dashboard/_Layout/AdminSidebar";
+import AdminHeader from "@/components/Dashboard/_Layout/AdminHeader";
 
 export default async function AdminLayout({
   children,

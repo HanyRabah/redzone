@@ -1,12 +1,10 @@
-"use server";
-
 import { ThemeProvider } from "@mui/material/styles";
-import HeroSlider from "@/components/Home/HeroSlider";
-import About from "@/components/Home/About";
-import Portfolio from "@/components/Home/Portfolio";
-import Clients from "@/components/Home/Clients";
-import Testimonials from "@/components/Home/Testimonials";
-import Blog from "@/components/Home/Blog";
+import HeroSlider from "@/components/Client/Home/HeroSlider";
+import About from "@/components/Client/Home/About";
+import Portfolio from "@/components/Client/Home/Portfolio";
+import Clients from "@/components/Client/Home/Clients";
+import Testimonials from "@/components/Client/Home/Testimonials";
+import Blog from "@/components/Client/Home/Blog";
 import theme from "@/style/theme";
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from 'next/cache';
@@ -20,7 +18,8 @@ const getPageData = async () => {
     testimonials,
     featuredProjects,
     blogPosts,
-  ] = await Promise.all([
+    sections
+      ] = await Promise.all([
     prisma.heroSlider.findUnique({
       where: { page: "home" },
       include: { slides: true },
@@ -39,6 +38,7 @@ const getPageData = async () => {
         author: true,
       },
     }),
+    prisma.sections.findMany({ where: { page: "home" } })
   ]);
 
   return {
@@ -48,6 +48,7 @@ const getPageData = async () => {
     testimonials,
     featuredProjects,
     blogPosts,
+    sections
   };
 };
 
@@ -59,14 +60,15 @@ export default async function Home() {
     testimonials,
     featuredProjects,
     blogPosts,
+    sections
   } = await getPageData();
   return (
     <ThemeProvider theme={theme}>
       <main className="relative mb-230 md:mb-100 bg-white">
         <HeroSlider pageSlides={heroSlider} />
         <About pageData={aboutUsSection} />
-        <Portfolio projects={featuredProjects} />
-        <Clients clients={clients} />
+        <Portfolio projects={featuredProjects} section={sections.find((section) => section.section === "portfolio")} />
+        <Clients clients={clients} section={sections.find((section) => section.section === "clients")} />
         <Testimonials pageData={testimonials} />
         <Blog blogPosts={blogPosts} />
       </main>

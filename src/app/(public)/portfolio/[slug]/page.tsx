@@ -1,4 +1,4 @@
-import PortfolioDetailPage from "@/components/Portfolio/SinglePost";
+import PortfolioDetailPage from "@/components/Client/Portfolio/SinglePost";
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from 'next/cache';
 

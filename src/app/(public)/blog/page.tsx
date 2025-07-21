@@ -1,9 +1,8 @@
 
 import React from 'react';
-import HeroSlider from '@/components/Home/HeroSlider';
-//import Newsletter from '@/components/Layout/Newsletter/Newsletter';
 import { prisma } from '@/lib/prisma';
-import BlogPage from '@/components/Blog';
+import BlogPage from '@/components/Client/Blog';
+import HeroSlider from '@/components/Client/Home/HeroSlider';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const getBlogData = async () => {
@@ -40,7 +39,6 @@ export default async function Blog() {
     <main className="relative mb-100">
      <HeroSlider pageSlides={heroSlider}/>
      <BlogPage blogPosts={posts} categories={categories} tags={tags}/>
-     {/* <Newsletter/> */}
     </main>
   );
 }

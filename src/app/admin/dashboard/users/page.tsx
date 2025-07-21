@@ -6,7 +6,7 @@ import { useState } from "react";
 import useUser from "@/hooks/admin/useUser";
 import { User } from "@prisma/client";
 
-export default function UsersAdmin() {
+export default function Page() {
 
     const [addUserDrawerOpen, setAddUserDrawerOpen] = useState(false);
     const [userData, setUserData] = useState<User>({
@@ -42,16 +42,6 @@ export default function UsersAdmin() {
             alert('Failed to add user');
         }
     };
-
-    // const handleUpdateUser = async (user: User) => {
-    //     try {
-    //         await updateUser(user);
-    //         alert('User updated successfully');
-    //     } catch (error) {
-    //         console.error('Error updating user:', error);
-    //         alert('Failed to update user');
-    //     }
-    // };
 
     return (
         <div>

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { redirect } from "next/navigation";
-import SettingsTabs from "@/components/admin/Tabs/SettingsTabs";
+import SettingsPage from "@/components/Dashboard/Settings";
 
 async function getSettingsData() {
   const session = await getServerSession(authOptions);
@@ -22,7 +22,7 @@ async function getSettingsData() {
   };
 }
 
-export default async function SettingsPage() {
+export default async function Page() {
   const {siteSettings, users} = await getSettingsData();
 
   return (
@@ -35,7 +35,7 @@ export default async function SettingsPage() {
           Manage your site settings and preferences
         </p>
       </div>
-      <SettingsTabs siteSettings={siteSettings} users={users} />
+      <SettingsPage siteSettings={siteSettings} users={users} />
     </div>
   );
 }

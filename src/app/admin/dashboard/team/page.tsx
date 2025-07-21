@@ -1,4 +1,4 @@
-import TeamSectionManager from "@/components/admin/managers/TeamSectionManager"
+import TeamSectionManager from "@/components/Dashboard/About/Managers/TeamSectionManager"
 import { prisma } from "@/lib/prisma";
 
 async function getTeamMembers()  {
@@ -14,10 +14,7 @@ async function getTeamMembers()  {
   };
 }
 
-const TeamPage = async () => {
+export default async function Page() {
     const { teamMembers, teamSection } = await getTeamMembers();
-    console.log(teamMembers, teamSection);
     return <TeamSectionManager teamSection={teamSection} teamMembers={teamMembers} />
 }
-
-export default TeamPage
