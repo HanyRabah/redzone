@@ -3,6 +3,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  // Skip middleware for static files
+  if (
+    request.nextUrl.pathname.startsWith('/_next') ||
+    request.nextUrl.pathname.includes('.') ||
+    request.nextUrl.pathname === '/favicon.ico' ||
+    request.nextUrl.pathname === '/manifest.json'
+  ) {
+    return NextResponse.next();
+  }
+
   const token = await getToken({ req: request });
   const isAuthPage = request.nextUrl.pathname === '/admin/login';
   const isAdminPage = request.nextUrl.pathname.startsWith('/admin');

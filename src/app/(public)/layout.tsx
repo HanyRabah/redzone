@@ -4,6 +4,8 @@ import Footer from "@/components/Layout/Footer";
 import LoadingScreen from "@/components/Layout/LoadingScreen";
 import MousePointer from "@/components/Layout/MousePointer";
 import ScrollTop from "@/components/ScrollToTop";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "@/style/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -62,20 +64,22 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* <link rel="icon" href="/icon.svg" type="image/svg+xml" /> */}
+        {/* <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#f70000" />
       </head>
       <body>
-        <div className={`relative`}>
-          <LoadingScreen />
-          <Header />
-          <MousePointer />
-          <ScrollTop />
-          {children}
-          <Footer />
-        </div>
+        <main className="relative mb-230 md:mb-100 bg-white">
+          <ThemeProvider theme={theme}>
+            <LoadingScreen />
+            <Header />
+            <MousePointer />
+            <ScrollTop />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </main>
       </body>
     </html>
   );

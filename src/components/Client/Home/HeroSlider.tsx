@@ -13,6 +13,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { HeroSlide, HeroSlider as HeroSliderType } from "@prisma/client";
 import router from "next/router";
+import useBreakpoint from "@/hooks/useBreakpoint";
 
 interface ExtendedHTMLElement extends HTMLElement {
   progress?: number;
@@ -27,6 +28,8 @@ const HeroSlider: React.FC<{ pageSlides: HeroSliderTypeWithSlides | null }> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === "phone" || breakpoint === "tablet";
 
   const overlayVariants = {
     hidden: { x: 0 },
@@ -114,7 +117,7 @@ const HeroSlider: React.FC<{ pageSlides: HeroSliderTypeWithSlides | null }> = ({
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
-          delay: 10000,
+          delay: 100000,
           disableOnInteraction: false,
         }}
         onSwiper={(swiper) => setSwiperRef(swiper)}
@@ -171,13 +174,14 @@ const HeroSlider: React.FC<{ pageSlides: HeroSliderTypeWithSlides | null }> = ({
                 className="slide-bg absolute inset-0 bg-cover bg-center bg-no-repeat w-1/2"
                 style={{
                   backgroundImage: `url(${slide.backgroundImage})`,
+                  opacity: isMobile ? 0.5 : 1,
                 }}
               />
 
               <div className="flex w-full items-center h-full">
-                <div className="container relative flex flex-row mx-auto py-[120px]">
-                  <div className="block relative box-border mx-auto lg:ml-[50%] basis-1/2 z-1">
-                    <div className="ml-[40px]">
+                <div className="container relative flex flex-row mx-auto md:py-[120px]">
+                  <div className="block relative box-border mx-auto lg:ml-[50%] md:basis-1/2 basis-2/3 z-1">
+                    <div className="lg:ml-[40px]">
                       <AnimatePresence mode="wait">
                         {activeIndex === index && (
                           <div key={index}>
@@ -216,7 +220,7 @@ const HeroSlider: React.FC<{ pageSlides: HeroSliderTypeWithSlides | null }> = ({
                                   initial="hidden"
                                   animate="visible"
                                   exit="hidden"
-                                  className="relative"
+                                  className="relative bg-black bg-opacity-25 px-1 mb-1 md:bg-transparent md:mb-0 md:p-0"
                                 >
                                   <span className="text-[35px] md:text-[45px] lg:text-[55px] xl:text-[65px] font-bold uppercase text-white tracking-[-2px]">
                                     {line}
@@ -237,7 +241,7 @@ const HeroSlider: React.FC<{ pageSlides: HeroSliderTypeWithSlides | null }> = ({
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{
-                                  delay: 3,
+                                  delay: 1.6,
                                   duration: 1,
                                   ease: [0.767, 0.01, 0.18, 1.01],
                                 }}

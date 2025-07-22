@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Client, Sections } from "@prisma/client";
-import useBreakpoint from "@/hooks/useBreakpoint";
+
 
 interface ClientsProps {
   clients: Client[];
@@ -15,7 +15,6 @@ interface ClientsProps {
 const Clients: React.FC<ClientsProps> = ({ clients, section }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const breakpoint = useBreakpoint();
 
   const titleVariants = {
     hidden: { width: "0%" },
@@ -63,25 +62,26 @@ const Clients: React.FC<ClientsProps> = ({ clients, section }) => {
     },
   };
 
-  const getBorderClasses = (
-    index: number,
-    totalItems: number,
-    cols: number
-  ) => {
-    const row = Math.floor(index / cols);
-    const col = index % cols;
-    const totalRows = Math.ceil(totalItems / cols);
+  // Calculate total items including the "This spot awaits you" placeholder
+  const totalItems = clients.length + 1;
+  const cols = 4; // Always 4 columns on large screens, 2 on mobile
+  const totalRows = Math.ceil(totalItems / cols);
 
-    let borderClasses = "";
+  const getBorderClasses = (index: number, isPlaceholder = false) => {
+    const actualIndex = isPlaceholder ? clients.length : index;
+    const row = Math.floor(actualIndex / cols);
+    const col = actualIndex % cols;
+
+    let borderClasses = "border-gray-400";
 
     // Right border for all except last column
     if (col < cols - 1) {
-      borderClasses += " border-r border-gray-400";
+      borderClasses += " border-r";
     }
 
     // Bottom border for all except last row
     if (row < totalRows - 1) {
-      borderClasses += " border-b border-gray-400";
+      borderClasses += " border-b";
     }
 
     return borderClasses;
@@ -115,44 +115,41 @@ const Clients: React.FC<ClientsProps> = ({ clients, section }) => {
             animate={isInView ? "visible" : "hidden"}
             className="grid grid-cols-2 lg:grid-cols-4 mb-20"
           >
-            {clients.map((client, index) => {
-              if(!client.isActive) return null;
-              return (
-                <motion.div
-                  key={`method2-${client.id}`}
-                  variants={clientVariants}
-                  custom={index}
-                  className={`group relative h-48 p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(
-                    index,
-                    clients.length,
-                    breakpoint === "desktop" ? 4 : 2
-                  )}`} 
+            {clients.map((client, index) => (
+              <motion.div
+                key={`client-${client.id}`}
+                variants={clientVariants}
+                custom={index}
+                className={`group relative h-48 p-4 flex items-center justify-center transition-colors duration-300 ${getBorderClasses(index)}`}
+              >
+                <Link 
+                  href={client.website || "#"} 
+                  target={client.website ? "_blank" : "_self"} 
+                  className="relative w-full h-full flex items-center justify-center"
                 >
-                  <Link href={client.website || "#"} target={client.website ? "_blank" : "_self"} className="relative w-full h-full link">
-                      <Image
-                        src={client.logo}
-                        alt={client.name}
-                        fill
-                        className="w-full h-full object-contain group-hover:opacity-100 transition-all duration-100 group-hover:[filter:invert(14%)_sepia(100%)_saturate(7463%)_hue-rotate(1deg)_brightness(103%)_contrast(103%)]"
-                      />
-                  </Link>
-                </motion.div>
-              )
-            })}
+                  <Image
+                    src={client.logo}
+                    alt={client.name}
+                    fill
+                    className="w-full h-full object-contain group-hover:opacity-100 transition-all duration-100 group-hover:[filter:invert(14%)_sepia(100%)_saturate(7463%)_hue-rotate(1deg)_brightness(103%)_contrast(103%)]"
+                  />
+                </Link>
+              </motion.div>
+            ))}
+            
+            {/* Placeholder "This spot awaits you" */}
             <motion.div
               custom={clients.length}
               variants={clientVariants}
-              className="group relative h-48 flex flex-col items-center justify-center transition-colors duration-300 link"
+              className={`group relative h-48 flex flex-col items-center justify-center transition-colors duration-300 ${getBorderClasses(0, true)}`}
             >
-              <Typography className="text-white text-sm uppercase tracking-widest font-bold hover:border-red-500 transition-colors duration-300">
+              <Typography className="text-white text-sm uppercase tracking-widest font-bold text-center">
                 This spot <br /> Awaits <br /> You
               </Typography>
 
               {/* Animated Corners */}
-              <div className="absolute top-4 left-4 w-18 h-18 border-l-2 border-t-2  border-red-500 hover:w-24 hover:h-24 hover:border-red-500 transition-all duration-300" />
-              {/* <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-red-500" /> */}
-              {/* <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-red-500" /> */}
-              <div className="absolute bottom-4 right-4 w-18 h-18 border-r-2 border-b-2 border-red-500 hover:w-24 hover:h-24 hover:border-red-500 transition-all duration-300" />
+              <div className="absolute top-4 left-4 w-4 h-4 border-l-2 border-t-2 border-red-500 group-hover:w-6 group-hover:h-6 transition-all duration-300" />
+              <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-red-500 group-hover:w-6 group-hover:h-6 transition-all duration-300" />
             </motion.div>
           </motion.div>
         </div>

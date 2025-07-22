@@ -29,10 +29,12 @@ export default function FlipCtaButton({ text, onClick, href, disabled, color = "
       justify-center 
       bg-transparent 
       h-auto  
-      w-[170px]
+      w-[120px]
+      md:w-[170px]
       transition-all 
       duration-800
-      p-8
+      p-6
+      md:p-8
       border 
       ${borderColor}
       text-[12px]

@@ -13,7 +13,7 @@ const getPageData = async () => {
   const [heroSlider, aboutUsSection, clients, testimonials, featuredProjects, categories, blogPosts, sections] = await Promise.all([
     prisma.heroSlider.findUnique({ where: { page: 'home' }, include: {slides: true} }),
     prisma.aboutUsSection.findFirst(),
-    prisma.client.findMany({ orderBy: { sortOrder: 'asc' } }),
+    prisma.client.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' } }),
     prisma.testimonial.findMany({ orderBy: { sortOrder: 'asc' } }),
     prisma.project.findMany({ 
       where: { isFeatured: true },
@@ -46,13 +46,13 @@ export default async function Home() {
   const {heroSlider, aboutUsSection, clients, testimonials, featuredProjects, categories, blogPosts, sections} = await getPageData();
   const sectionTitle = sections.find((section) => section.section === "portfolio");
   return (
-    <main className="relative mb-150">
+    <>
       <HeroSlider pageSlides={heroSlider} />
       <About pageData={aboutUsSection} />
       <Portfolio projects={featuredProjects} categories={categories} section={sectionTitle} />
       <Clients clients={clients} />
       <Testimonials pageData={testimonials} />
       {blogPosts && blogPosts.length > 0 ? <Blog blogPosts={blogPosts} /> : null}
-    </main>
+    </>
   );
 }

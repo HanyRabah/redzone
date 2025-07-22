@@ -40,7 +40,7 @@ const Header = () => {
   const { scrollY } = useScroll();
   const router = useRouter();
 
-  const headerY = useTransform(scrollY, [0, 100], [0, -100]);
+  const headerY = useTransform(scrollY, [0, 100], [0, -120]);
 
   useEffect(() => {
     const controlHeader = () => {
@@ -83,7 +83,7 @@ const Header = () => {
     <>
       <motion.div
         style={{ y: headerY }}
-        animate={{ y: isVisible ? 0 : -100 }}
+        animate={{ y: isVisible ? 0 : -120 }}
         transition={{ duration: 0.6, ease: [0.76, 0.06, 0.85, 0.07] }}
         className="fixed top-0 left-0 right-0 z-50 w-full"
       >

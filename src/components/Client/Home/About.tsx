@@ -36,7 +36,7 @@ const RedZoneCreativePageInteractive = ({pageData}: {pageData: AboutUsSection | 
       scale: 1,
       transition: {
         delay: i * 0.4,
-        duration: 1,
+        duration: 0.6,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     }),
@@ -51,7 +51,7 @@ const RedZoneCreativePageInteractive = ({pageData}: {pageData: AboutUsSection | 
       y: 0,
       opacity: 1,
       transition: {
-        delay: 1.2 + i * 0.3,
+        delay: 0.2 + i * 0.3,
         duration: 0.8,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
@@ -74,7 +74,7 @@ const RedZoneCreativePageInteractive = ({pageData}: {pageData: AboutUsSection | 
     visible: (i: number) => ({
       x: "100%",
       transition: {
-        delay: 1.6 + i * 0.1,
+        delay: 1 + i * 0.1,
         duration: 1,
         ease: [0.858, 0.01, 0.068, 0.99],
       },
@@ -120,7 +120,7 @@ const RedZoneCreativePageInteractive = ({pageData}: {pageData: AboutUsSection | 
                     <motion.span
                       variants={titleVariants}
                       custom={index}
-                      className="inline-block hover:scale-105 transition-transform duration-300"
+                      className="inline-block"
                     >
                       {line}
                       <motion.div
