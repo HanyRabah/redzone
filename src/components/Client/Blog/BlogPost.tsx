@@ -16,7 +16,7 @@ const BlogPost = ({ post, index }: BlogPostProps) => {
   }, [index]);
 
   return (
-    <article className={`mb-20 bg-[#f0f0f0] rounded-lg overflow-hidden shadow-sm group hover:shadow-md transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+    <article className={`mb-20 bg-secondary rounded-lg overflow-hidden shadow-sm group hover:shadow-md transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
       <a href={`/blog/${post.slug}`} className="block relative overflow-hidden">
         <div className="relative overflow-hidden h-[200px] md:h-[400px] lg:h-[600px]">
           <Image     

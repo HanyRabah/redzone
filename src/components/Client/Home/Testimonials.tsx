@@ -9,7 +9,7 @@ import { Testimonial } from "@prisma/client";
 const Testimonials = ({ pageData }: { pageData: Testimonial[] }) => {
  
   return (
-    <div className="bg-[#f0f0f0] py-30 px-4">
+    <div className="bg-secondary py-30 px-4" data-dark-section="false">
       <Swiper
         modules={[Pagination, Autoplay]}
         spaceBetween={30}

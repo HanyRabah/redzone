@@ -114,7 +114,7 @@ const Blog = ({ blogPosts }: BlogProps) => {
               <motion.article
                 key={post.id}
                 variants={itemVariants}
-                className="bg-[#f0f0f0] overflow-hidden group"
+                className="bg-secondary overflow-hidden group"
               >
                 <Link href={`/blog/${post.slug}`}>
                   <Box className="relative h-[300px] overflow-hidden pointer-large">
@@ -133,7 +133,7 @@ const Blog = ({ blogPosts }: BlogProps) => {
                         className="object-cover"
                       />
                       <motion.div
-                        className="absolute inset-0 bg-[#f0f0f0]"
+                        className="absolute inset-0 bg-secondary"
                         initial={{ x: "-100%" }}
                         whileHover={{ x: 0 }}
                         transition={{

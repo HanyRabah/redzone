@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import {
   Add as AddIcon,
-  // Delete as DeleteIcon,
+  Delete as DeleteIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
   LocationOn as LocationIcon,
@@ -117,17 +117,17 @@ export default function ContactDetailsForm({
     }));
   };
 
-  // const removeContactSection = (contactIndex: number) => {
-  //   if (formData.contacts.length <= 1) {
-  //     toast.error('At least one contact section is required')
-  //     return
-  //   }
+  const removeContactSection = (contactIndex: number) => {
+    if (formData.contacts.length <= 1) {
+      toast.error('At least one contact section is required')
+      return
+    }
 
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     contacts: prev.contacts.filter((_, index) => index !== contactIndex)
-  //   }))
-  // }
+    setFormData(prev => ({
+      ...prev,
+      contacts: prev.contacts.filter((_, index) => index !== contactIndex)
+    }))
+  }
 
   const updateContactSection = (
     contactIndex: number,
@@ -152,22 +152,22 @@ export default function ContactDetailsForm({
     }));
   };
 
-  // const removeContactItem = (contactIndex: number, itemIndex: number) => {
-  //   const contact = formData.contacts[contactIndex]
-  //   if (!contact || contact.items.length <= 1) {
-  //     toast.error('At least one contact item is required per section')
-  //     return
-  //   }
+  const removeContactItem = (contactIndex: number, itemIndex: number) => {
+    const contact = formData.contacts[contactIndex]
+    if (!contact || contact.items.length <= 1) {
+      toast.error('At least one contact item is required per section')
+      return
+    }
 
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     contacts: prev.contacts.map((contact, index) =>
-  //       index === contactIndex
-  //         ? { ...contact, items: contact.items.filter((_, j) => j !== itemIndex) }
-  //         : contact
-  //     )
-  //   }))
-  // }
+    setFormData(prev => ({
+      ...prev,
+      contacts: prev.contacts.map((contact, index) =>
+        index === contactIndex
+          ? { ...contact, items: contact.items.filter((_, j) => j !== itemIndex) }
+          : contact
+      )
+    }))
+  }
 
   const updateContactItem = (
     contactIndex: number,
@@ -497,16 +497,16 @@ export default function ContactDetailsForm({
                                 <ArrowDownIcon />
                               </IconButton>
                             </Tooltip>
-                            {/* <Tooltip title="Delete Section">
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => removeContactSection(index)}
-                              disabled={formData.contacts.length <= 1}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip> */}
+                            <Tooltip title="Delete Section">
+                              <IconButton
+                                size="small"
+                                color="error"
+                                onClick={() => removeContactSection(index)}
+                                disabled={formData.contacts.length <= 1}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
                         }
                       />
@@ -573,16 +573,16 @@ export default function ContactDetailsForm({
                                       ),
                                     }}
                                   />
-                                  {/* <Tooltip title="Remove Item">
-                                  <IconButton
-                                    size="small"
-                                    color="error"
-                                    onClick={() => removeContactItem(index, itemIndex)}
-                                    disabled={contact.items.length <= 1}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Tooltip> */}
+                                  <Tooltip title="Remove Item">
+                                    <IconButton
+                                      size="small"
+                                      color="error"
+                                      onClick={() => removeContactItem(index, itemIndex)}
+                                      disabled={contact.items.length <= 1}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Tooltip>
                                 </Box>
                               ))}
 

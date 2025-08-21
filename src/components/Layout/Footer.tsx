@@ -14,9 +14,6 @@ const menuItems: { name: string; href: string }[] = [{
   name: 'About',
   href: '/about',
 }, {
-  name: 'Services',
-  href: '/services',
-}, {
   name: 'Portfolio',
   href: '/portfolio',
 }, {
