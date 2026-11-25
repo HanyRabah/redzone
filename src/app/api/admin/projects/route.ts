@@ -153,22 +153,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-type PageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export async function PATCH(
-  request: NextRequest,
-  { params }: PageProps
-) {
+export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const data = await request.json()
-    const { id } = await params
+    const { id, ...data } = await request.json()
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 })
+    }
 
     const project = await prisma.project.update({
       where: { id },
