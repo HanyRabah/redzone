@@ -63,14 +63,6 @@ body {
   padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-
 /* Custom Swiper Styles */
 .swiper {
   width: 100%;
@@ -109,7 +101,6 @@ body {
 html {
   scroll-behavior: smooth;
 }
-
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
